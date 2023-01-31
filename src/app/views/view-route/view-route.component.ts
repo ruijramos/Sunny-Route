@@ -164,7 +164,7 @@ export class ViewRouteComponent {
   async getWeatherCityTrios() {
     // Extract weather for each location
     for (let i = 0; i < this.locations_coordinates.length; i++) {
-      let response = await this.weatherService.getWeatherAndCityNameByCoordinates(this.locations_coordinates[i], this.date_formated);
+      let response = await this.weatherService.getWeatherAndCityNameByCoordinates(this.locations_coordinates[i], this.starting_location_coordinates, this.date_formated);
       this.locations_weather_map.set(response[1]!, [response[0]!, response[2]!, response[3]!]);
     }
   }
