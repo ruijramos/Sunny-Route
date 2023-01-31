@@ -228,7 +228,7 @@ export class ViewRouteComponent {
             body: doc_definition_body
           }
         },
-        { text: 'SunnyRoute is a GPS that allows you to view the weather information expected at different points along your route. You cand find more information in: https://github.com/ruijramos/SunnyRoute.', style: 'littletext' }
+        { text: 'Sunny Route is a GPS that allows you to view the weather information expected at different points along your route. You cand find more information in: https://github.com/ruijramos/Sunny-Route.', style: 'littletext' }
       ],
       styles: {
         filledHeader: {

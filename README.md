@@ -1,6 +1,6 @@
-# <img src="https://user-images.githubusercontent.com/47954852/215338973-e1194610-c7ab-4cd6-903b-271124359a63.png" width="30"> SunnyRoute
+# <img src="https://user-images.githubusercontent.com/47954852/215338973-e1194610-c7ab-4cd6-903b-271124359a63.png" width="30"> Sunny Route
 
-**SunnyRoute is a GPS that allows you to view the weather information expected at different points along your route.**
+**Sunny Route is a GPS that allows you to view the weather information expected at different points along your route.**
 
 1. Choose a departure location and time, and an arrival location.
 
