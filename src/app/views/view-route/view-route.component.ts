@@ -29,6 +29,7 @@ export class ViewRouteComponent {
   public map: any;
   public itenerary: any;
   public porto_portugal_coordinates = [41.14961, -8.61099]
+  public route_max_distance: number = 3000000;
   public locations_coordinates: any[] = [];
   public locations_names: any[] = [];
   public locations_weather_map = new Map<string, [number, string, string]>();
@@ -64,6 +65,9 @@ export class ViewRouteComponent {
       this.has_data = false;
     }
 
+    // Alert user that there is no data or date inserted is invalid
+    if (!this.has_data) alert("There is no data to build the route or data passed on is invalid. Please create a new route.");
+
     var map_center;
     // If there is no data (the page has not been invoked through the previous page), the center is set in the city of Porto, Portugal
     // This way, it is not necessary to ask the user for his location
@@ -77,6 +81,12 @@ export class ViewRouteComponent {
     // Build route from starting location do destination
     if (this.has_data) await this.buildRoute();
 
+    // Check if route distance is not to much - avoid performance issues
+    if(this.itenerary._selectedRoute.summary.totalDistance > this.route_max_distance) {
+      this.has_data = false;
+      alert("It will not be possible to show weather information for this route: route too long.");
+    }
+
     // Extract locations from route
     if (this.has_data) await this.extractLocationsFromRoute(2);
 
@@ -85,9 +95,6 @@ export class ViewRouteComponent {
 
     // Add weather informations to HTML
     if (this.has_data) await this.addWeatherToInterface();
-
-    // Alert user that there is no data
-    if (!this.has_data) alert("There is no data to build the route or data passed on is invalid. Please create a new route.");
 
     this.is_loading = false;
   }
@@ -198,7 +205,7 @@ export class ViewRouteComponent {
 
   // Convert HTML div to PDF and download it
   downloadPDF() {
-    if (!this.has_data){
+    if (!this.has_data || this.is_loading){
       alert("No data available.");
       return;
     } 
