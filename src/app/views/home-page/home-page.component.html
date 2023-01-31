@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+</head>
+
+<body>
+
+  <div id="global-container">
+
+    <div class="form-container">
+      <form>
+        <h3 class="form-title">Let the journey begin!</h3>
+
+        <div class="form-group">
+          <label for="starting-location">From:</label>
+          <input type="text" list="departure-cities-list" (ngModelChange)="buildDepartureLocationDatalist()"
+            id="starting-location" placeholder="Departure location" [(ngModel)]="starting_location"
+            name="startingLocation" autocomplete="off" required>
+          <datalist id="departure-cities-list">
+            <option *ngFor="let city of departure_cities_list" [value]="city">
+              {{ city }}
+            </option>
+          </datalist>
+        </div>
+
+        <div class="form-group">
+          <label for="destination">To:</label>
+          <input type="text" list="destination_cities_list" (ngModelChange)="buildDestinationLocationDatalist()"
+            id="destination" placeholder="Arrival location" [(ngModel)]="destination" name="destination"
+            autocomplete="off" required>
+          <datalist id="destination_cities_list">
+            <option *ngFor="let city of destination_cities_list" [value]="city">
+              {{ city }}
+            </option>
+          </datalist>
+        </div>
+
+        <div class="form-group">
+          <label for="date">Date:</label>
+          <input type="datetime-local" min={{today_date}} max={{five_days_date}} id="date" [(ngModel)]="date"
+            name="date" required>
+        </div>
+
+        <div class="button-container">
+          <button id="submit-button" type="submit" (click)="submitForm()">
+            <span *ngIf="!is_loading">Show me the weather!</span>
+            <span *ngIf="is_loading">Loading...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <a target="_blank" rel="noopener noreferrer" href="https://github.com/ruijramos/Sunny-Route">
+      <img src="../assets/images/cut_logo.png" alt="Sunny Route Logo" id="app-logo">
+    </a>
+
+  </div>
+
+</body>
+
+</html>

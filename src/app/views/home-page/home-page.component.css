@@ -1,0 +1,297 @@
+#global-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+
+    width: 100%;
+    max-width: 60rem;
+    min-height: 90vh;
+}
+
+.form-container {
+    width: 90%;
+
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.form-title {
+    color: #39393A;
+    font-weight: 500; /* Semi-Bold */
+
+    text-align: center;
+
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+form {
+    background-color: white;
+
+    padding: 1rem 2rem 1rem 2rem;
+    margin: auto;
+
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    display: block;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+input {
+    width: 98%;
+
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.5rem;
+
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+}
+
+input::placeholder {
+    color: #39393A;
+}
+
+label {
+    font-weight: bold;
+    color: #39393A;
+}
+
+button[type="submit"] {
+    background-color: #37ACE3;
+    color: white;
+
+    padding: 0.75rem 1.5rem;
+    margin-top: 1rem;
+
+    border: none;
+    border-radius: 0.25rem;
+
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #73C4EB;
+}
+
+.button-container {
+    display: flex;
+
+    justify-content: center;
+
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+#app-logo {
+    margin-bottom: 2rem;
+}
+
+/* new Galaxy Folds */
+@media(max-width: 320px){ 
+
+    .form-title {
+        font-size: 1rem;
+    }
+
+    label {
+        font-size: 0.6rem;
+    }
+
+    input {
+        font-size: 0.5rem;
+    }
+
+    input::placeholder {
+        font-size: 0.5rem;
+    }
+
+    #submit-button {
+        font-size: 0.6rem;
+    }
+
+    #app-logo {
+        width: calc(3rem + .5vw);
+    }
+
+}
+
+/* smartphones, iPhone, portrait 480x320 phones */ 
+@media (min-width:320px)  { 
+
+    .form-title {
+        font-size: 1.2rem;
+    }
+
+    label {
+        font-size: 0.8rem;
+    }
+
+    input {
+        font-size: 0.7rem;
+    }
+
+    input::placeholder {
+        font-size: 0.7rem;
+    }
+
+    #submit-button {
+        font-size: 0.8rem;
+    }
+
+    #app-logo {
+        width: calc(3.2rem + .5vw);
+    }
+
+}
+
+/* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */ 
+@media (min-width:481px)  {
+
+    .form-title {
+        font-size: 1.2rem;
+    }
+
+    label {
+        font-size: 0.8rem;
+    }
+
+    input {
+        font-size: 0.7rem;
+    }
+
+    input::placeholder {
+        font-size: 0.7rem;
+    }
+
+    #submit-button {
+        font-size: 0.8rem;
+    }
+
+    #app-logo {
+        width: calc(4.2rem + .5vw);
+    }
+
+}
+
+/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */ 
+@media (min-width:641px)  { 
+
+    .form-title {
+        font-size: 1.5rem;
+    }
+
+    label {
+        font-size: 1.1rem;
+    }
+
+    input {
+        font-size: 1rem;
+    }
+
+    input::placeholder {
+        font-size: 1rem;
+    }
+
+    #submit-button {
+        font-size: 1.1rem;
+    }
+
+    #app-logo {
+        width: calc(4.2rem + .5vw);
+    }
+
+}
+
+/* tablet, landscape iPad, lo-res laptops ands desktops */ 
+@media (min-width:961px)  { 
+
+    .form-title {
+        font-size: calc(1em + .5vw);
+    }
+
+    label {
+        font-size: calc(0.7em + .5vw);
+    }
+
+    input {
+        font-size: calc(0.6rem + .5vw);
+    }
+
+    input::placeholder {
+        font-size: calc(0.6rem + .5vw);
+    }
+
+    #submit-button {
+        font-size: calc(0.7em + .5vw);
+    }
+
+    #app-logo {
+        width: calc(4.2rem + .5vw);
+    }
+
+}
+
+/* big landscape tablets, laptops, and desktops */ 
+@media (min-width:1025px) { 
+
+    .form-title {
+        font-size: calc(0.8em + .5vw);
+    }
+
+    label {
+        font-size: calc(0.5em + .5vw);
+    }
+
+    input {
+        font-size: calc(0.4rem + .5vw);
+    }
+
+    input::placeholder {
+        font-size: calc(0.4rem + .5vw);
+    }
+
+    #submit-button {
+        font-size: calc(0.5em + .5vw);
+    }
+
+    #app-logo {
+        width: calc(4.2rem + .5vw);
+    }
+
+}
+
+/* hi-res laptops and desktops */
+@media (min-width:1281px) { 
+
+    .form-title {
+        font-size: calc(0.6em + .5vw);
+    }
+
+    label {
+        font-size: calc(0.3em + .5vw);
+    }
+
+    input {
+        font-size: calc(0.2rem + .5vw);
+    }
+
+    input::placeholder {
+        font-size: calc(0.2rem + .5vw);
+    }
+
+    #submit-button {
+        font-size: calc(0.3em + .5vw);
+    }
+
+    #app-logo {
+        width: calc(4.2rem + .5vw);
+    }
+
+}

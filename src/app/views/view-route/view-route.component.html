@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+</head>
+
+<body>
+
+  <div id="global-container">
+
+    <div class="top-nav-bar">
+      <a href=""> New Route </a>
+      <a target="_blank" rel="noopener noreferrer" href="https://github.com/ruijramos/Sunny-Route"> About </a> 
+      <a id="weather-info-button" (click)="toggleWeatherInfoSidebar()">
+        <mat-icon> menu </mat-icon>
+      </a>
+    </div>
+
+    <div id="map-and-sidebar-flex-box">
+      
+      <div class="map-container" id="map" #map></div>
+
+      <div [ngClass]="{'open': weather_info_is_open}" class="weather-info-sidebar" id="weather-info-sidebar">
+        <div id="weather-info-container-title"> 
+          Weather Information 
+          <br>
+          <span class="route-info">{{starting_location}} - {{destination}}</span>
+          <br>
+          <span class="route-info">{{date_formated}}</span>
+        </div>
+        <div id="dinamic-weather-elements">
+          <div *ngIf="is_loading" class="loading-nodata-card">
+            Loading weather informations...
+          </div>
+          <div *ngIf="!has_data" class="loading-nodata-card">
+            No data to display.
+          </div>
+        </div>
+        <div id="weather-info-pdf" (click)="downloadPDF()"> 
+          <mat-icon> cloud_download </mat-icon>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+
+</html>
