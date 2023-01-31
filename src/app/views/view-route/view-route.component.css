@@ -1,0 +1,148 @@
+#global-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.top-nav-bar {
+    background-color: #37ACE3;
+    display: flex;
+    align-items: center;
+    height: 3rem;
+}
+
+.top-nav-bar a {
+    float: left;
+    color: white;
+    padding: 1rem;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+/* Change the color of links on hover */
+.top-nav-bar a:hover {
+    background-color: white;
+    color: #39393A;
+}
+
+#weather-info-button {
+    margin-left: auto;
+}
+
+#map-and-sidebar-flex-box {
+    display: flex;
+    flex: 1;
+    height: calc(100vh - 3rem);
+}
+
+.map-container {
+    flex: 1 0 auto;
+}
+
+.weather-info-sidebar {
+    width: 25rem;
+    background-color: white;
+    display: none;
+    padding: 0.3rem;
+    border-left: 2px solid #37ACE3;
+    overflow-y: scroll;
+    font-size: 0.8rem;
+}
+
+.weather-info-sidebar.open {
+    display: block;
+}
+
+#weather-info-container-title {
+    background-color: #0078AB;
+    color: white;
+    padding: 1rem;
+    border: 1px solid;
+    text-align: center;
+    border-radius: 5px 5px 0 0;
+    font-size: 0.9rem;
+}
+
+.route-info {
+    font-size: 0.7rem;
+}
+
+:host ::ng-deep .weather-info {
+    background-color: #37ACE3;
+    color: white;
+    padding: 0.5rem;
+    border: 1px solid;
+    border-radius: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    align-items: center;
+    height: 3rem;
+}
+
+.loading-nodata-card {
+    background-color: #37ACE3;
+    color: white;
+    padding: 0.5rem;
+    border: 1px solid;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+:host ::ng-deep .weather-icon-container {
+    width: 20%;
+    display: grid;
+    place-items: center;
+}
+
+:host ::ng-deep .weather-icon {
+    max-width: 3rem;
+    max-height: 3rem;
+    overflow: hidden;
+}
+
+:host ::ng-deep .weather-location {
+    width: 60%;
+}
+
+:host ::ng-deep .weather-value {
+    width: 20%;
+    font-size: 1.2rem;
+    font-weight: 500; /* Semi-Bold */
+}
+
+#weather-info-pdf {
+    background-color: #0078AB;
+    color: white;
+    padding: 1rem;
+    border: 1px solid;
+    text-align: center;
+    border-radius: 0 0 5px 5px;
+    cursor: pointer;
+}
+
+/* new Galaxy Folds */
+@media(max-width: 320px) {}
+
+/* smartphones, iPhone, portrait 480x320 phones */
+@media (min-width:320px) {}
+
+/* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
+@media (min-width:481px) {}
+
+/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+@media (min-width:641px) {}
+
+/* tablet, landscape iPad, lo-res laptops ands desktops */
+@media (min-width:961px) {}
+
+/* big landscape tablets, laptops, and desktops */
+@media (min-width:1025px) {}
+
+/* hi-res laptops and desktops */
+@media (min-width:1281px) {}
