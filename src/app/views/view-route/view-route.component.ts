@@ -29,7 +29,7 @@ export class ViewRouteComponent {
   public map: any;
   public itenerary: any;
   public porto_portugal_coordinates = [41.14961, -8.61099]
-  public route_max_distance: number = 3000000;
+  public route_max_distance: number = 7000000;
   public locations_coordinates: any[] = [];
   public locations_names: any[] = [];
   public locations_weather_map = new Map<string, [number, string, string]>();
