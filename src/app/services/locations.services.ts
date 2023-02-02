@@ -26,7 +26,7 @@ export class locationsService {
 
   // Get location coordinates from string adress
   async getCoordinatesFromAdress(adress: string) {
-    var coordinates: any[] = [];
+    let coordinates: any[] = [];
 
     await fetch(environment.nominatim_api_autocomplete_url + adress)
       .then(response => response.json())
@@ -44,7 +44,7 @@ export class locationsService {
 
   // Extract location name from coordinates
   async getLocationName(coordinates: any[]) {
-    var location: string = "";
+    let location: string = "";
 
     await fetch(environment.nominatim_api_reverse_url + "&lat=" + coordinates[0].lat + "&lon=" + coordinates[1].lng + "&addressdetails=1")
       .then(response => response.json())
@@ -60,7 +60,7 @@ export class locationsService {
 
   // Extract locations names that route passes by
   async getRouteLocationsNames(coordinates: any[]) {
-    var locations: any[] = [];
+    let locations: any[] = [];
 
     for (let i = 0; i < coordinates.length; i = i + this.coordinates_jump_size) {
       await fetch(environment.nominatim_api_reverse_url + "&lat=" + coordinates[i].lat + "&lon=" + coordinates[i].lng + "&addressdetails=1")
@@ -89,7 +89,7 @@ export class locationsService {
 
   // Extract locations coordinates that route passes by
   async getRouteLocationsCoordinates(coordinates: any[]) {
-    var locations: any[] = [];
+    let locations: any[] = [];
 
     for (let i = 0; i < coordinates.length; i = i + this.coordinates_jump_size) {
       locations.push([coordinates[i].lat, coordinates[i].lng])

@@ -169,32 +169,39 @@ export class ViewRouteComponent {
 
   // Get trios degrees-city-weather for all locations coordinates
   async getWeatherCityTrios() {
+    // Calculating only the driving time between the last coordinate and the current one, preserving the estimated arrival time, significantly improves performance
+    let last_coordinates = this.starting_location_coordinates;
+    let last_date = this.date_formated;
+
     // Extract weather for each location
     for (let i = 0; i < this.locations_coordinates.length; i++) {
-      let response = await this.weatherService.getWeatherAndCityNameByCoordinates(this.locations_coordinates[i], this.starting_location_coordinates, this.date_formated);
-      this.locations_weather_map.set(response[1]!, [response[0]!, response[2]!, response[3]!]);
+      let response = await this.weatherService.getWeatherAndCityNameByCoordinates(this.locations_coordinates[i], last_coordinates, last_date);
+      this.locations_weather_map.set(response[1]!, [Number(response[0]!), response[2]!, response[3]!]);
+      // Update last location values to calculate new driving times
+      last_coordinates = this.locations_coordinates[i];
+      last_date = response[4]!;
     }
   }
 
   // Add dynamic divs with weather information
   addWeatherToInterface() {
     for (let [key, value] of this.locations_weather_map) {
-      var weather_icon = this.utilsService.getWeatherIconFromWeatherID(Number(value[1]));
+      let weather_icon = this.utilsService.getWeatherIconFromWeatherID(Number(value[1]));
 
-      var div_parent_container = document.createElement('div');
+      let div_parent_container = document.createElement('div');
       div_parent_container.className = 'weather-info';
 
-      var div_son_icon_container = document.createElement('div');
+      let div_son_icon_container = document.createElement('div');
       div_son_icon_container.className = 'weather-icon-container';
       div_son_icon_container.innerHTML = `<img src="` + weather_icon + `" alt="Cloud Weather" class="weather-icon">`;
       div_parent_container.appendChild(div_son_icon_container);
 
-      var div_son_location = document.createElement('div');
+      let div_son_location = document.createElement('div');
       div_son_location.className = 'weather-location';
       div_son_location.innerHTML = key;
       div_parent_container.appendChild(div_son_location);
 
-      var div_son_weather_value = document.createElement('div');
+      let div_son_weather_value = document.createElement('div');
       div_son_weather_value.className = 'weather-value';
       div_son_weather_value.innerHTML = Math.round(value[0]).toString() + "º";
       div_parent_container.appendChild(div_son_weather_value);
@@ -211,14 +218,14 @@ export class ViewRouteComponent {
     } 
 
     // Create body with weather info
-    var doc_definition_body = [];
+    let doc_definition_body = [];
     doc_definition_body.push(['Location', 'Degree Celsius', 'Weather']);
     for (let [key, value] of this.locations_weather_map) {
       doc_definition_body.push([key, value[0], value[2]]);
     }
 
     // Create pdfmake dd variable
-    var doc_definition  = {
+    let doc_definition  = {
       content: [
         {
           table: {

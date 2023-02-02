@@ -10,7 +10,7 @@ export class weatherService {
 
     // String date to timestamp
     toTimestamp(strDate: string) {
-        var datum = Date.parse(strDate);
+        let datum = Date.parse(strDate);
         return datum / 1000;
     }
 
@@ -55,7 +55,10 @@ export class weatherService {
         let timestamp_start_date = this.toTimestamp(date);
         let human_format_start_date = new Date(timestamp_start_date);
         human_format_start_date.setSeconds(human_format_start_date.getSeconds() + driving_time); // Add driving time
-        let timestamp_new_date = human_format_start_date.getTime(); 
+        let timestamp_new_date = human_format_start_date.getTime();  
+
+        // Return most recent date to calculate new driving times on the next iteration
+        var return_formated_date = new Date(human_format_start_date).toISOString().split(".", 1)[0];
 
         // Fetch weather from foreseen time and location
         await fetch(environment.openweathermap_api_url + "?lat=" + coodinates[0] + "&lon=" + coodinates[1] + "&appid=" + environment.openweathermap_api_key + "&units=metric")
@@ -71,6 +74,6 @@ export class weatherService {
                 console.error('Error:', error);
             });
 
-        return [weather_degrees, city_name, weather_type_code, weather_type_string];
+        return [weather_degrees, city_name, weather_type_code, weather_type_string, return_formated_date];
     }
 }

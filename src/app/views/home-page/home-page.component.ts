@@ -63,8 +63,8 @@ export class HomePageComponent {
     }
 
     // Check if locations really exist. 
-    var start_coordinates = await this.locationsService.getCoordinatesFromAdress(this.starting_location);
-    var destination_coordinates = await this.locationsService.getCoordinatesFromAdress(this.destination);
+    let start_coordinates = await this.locationsService.getCoordinatesFromAdress(this.starting_location);
+    let destination_coordinates = await this.locationsService.getCoordinatesFromAdress(this.destination);
     if (start_coordinates.length == 0 || destination_coordinates.length == 0) {
       alert("The inserted locations must exist.");
       this.is_loading = false;
