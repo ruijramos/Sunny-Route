@@ -33,7 +33,7 @@
           <div *ngIf="is_loading" class="loading-nodata-card">
             Loading weather informations...
           </div>
-          <div *ngIf="!has_data" class="loading-nodata-card">
+          <div *ngIf="!has_data || api_error_occurence" class="loading-nodata-card">
             No data to display.
           </div>
         </div>

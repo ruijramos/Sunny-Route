@@ -11,6 +11,7 @@ export class locationsService {
   constructor() { }
 
   // Get the list of search suggestions through the text written so far
+  // If []: empty result or API error - no need to dinstinguish
   async getCitiesInSearch(search: string) {
     let cities_data: Array<any> = [];
 
@@ -25,6 +26,8 @@ export class locationsService {
   }
 
   // Get location coordinates from string adress
+  // If []: empty result 
+  // If [0, 0]: API error
   async getCoordinatesFromAdress(adress: string) {
     let coordinates: any[] = [];
 
@@ -37,54 +40,10 @@ export class locationsService {
       })
       .catch((error) => {
         console.error('Error:', error);
+        coordinates = [0, 0]
       });
 
     return coordinates;
-  }
-
-  // Extract location name from coordinates
-  async getLocationName(coordinates: any[]) {
-    let location: string = "";
-
-    await fetch(environment.nominatim_api_reverse_url + "&lat=" + coordinates[0].lat + "&lon=" + coordinates[1].lng + "&addressdetails=1")
-      .then(response => response.json())
-      .then(data => {
-        if (data.address.county) location = data.address.county;
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-    
-      return location;
-  }
-
-  // Extract locations names that route passes by
-  async getRouteLocationsNames(coordinates: any[]) {
-    let locations: any[] = [];
-
-    for (let i = 0; i < coordinates.length; i = i + this.coordinates_jump_size) {
-      await fetch(environment.nominatim_api_reverse_url + "&lat=" + coordinates[i].lat + "&lon=" + coordinates[i].lng + "&addressdetails=1")
-        .then(response => response.json())
-        .then(data => {
-          if (data.address.county) locations.push(data.address.county);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
-    }
-
-    // Last location
-    await fetch(environment.nominatim_api_reverse_url + "&lat=" + coordinates[coordinates.length - 1].lat + "&lon=" + coordinates[coordinates.length - 1].lng + "&addressdetails=1")
-      .then(response => response.json())
-      .then(data => {
-        if (data.address.county) locations.push(data.address.county);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-
-    // Get unique locations
-    return [...new Set(locations)];
   }
 
   // Extract locations coordinates that route passes by

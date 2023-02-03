@@ -70,6 +70,13 @@ export class HomePageComponent {
       this.is_loading = false;
       return;
     }
+    // API error check
+    if ((start_coordinates[0] == 0 && start_coordinates[1] == 0) || 
+        (destination_coordinates[0] == 0 && destination_coordinates[1] == 0)) {
+      alert("An error has occurred in the API, please try again later.");
+      this.is_loading = false;
+      return;
+    }
 
     // Check if date is not a previous one from now.
     let diff = new Date().getTime() - Date.parse(this.date);

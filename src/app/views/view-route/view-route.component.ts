@@ -25,13 +25,13 @@ export class ViewRouteComponent {
   public date: string = '';
   public date_formated: string = '';
   public has_data: boolean = false;
+  public api_error_occurence = false;
   public is_loading: boolean = false;
   public map: any;
   public itenerary: any;
   public porto_portugal_coordinates = [41.14961, -8.61099]
   public route_max_distance: number = 7000000;
   public locations_coordinates: any[] = [];
-  public locations_names: any[] = [];
   public locations_weather_map = new Map<string, [number, string, string]>();
   public weather_info_is_open: boolean = false; // Variable that defines the weather information display 
 
@@ -73,7 +73,7 @@ export class ViewRouteComponent {
     // This way, it is not necessary to ask the user for his location
     if (!this.has_data) map_center = this.porto_portugal_coordinates;
     // Calculate center to set map view
-    else map_center = this.calculateCenterCoordinates(this.starting_location_coordinates, this.destination_coordinates);
+    else map_center = this.utilsService.calculateCenterCoordinates(this.starting_location_coordinates, this.destination_coordinates);
 
     // Initialize and center map
     await this.initMap(map_center);
@@ -82,19 +82,24 @@ export class ViewRouteComponent {
     if (this.has_data) await this.buildRoute();
 
     // Check if route distance is not to much - avoid performance issues
-    if(this.itenerary._selectedRoute.summary.totalDistance > this.route_max_distance) {
+    if (this.itenerary._selectedRoute.summary.totalDistance > this.route_max_distance) {
       this.has_data = false;
       alert("It will not be possible to show weather information for this route: route too long.");
     }
 
-    // Extract locations from route
-    if (this.has_data) await this.extractLocationsFromRoute(2);
+    // Extract coordinates from route
+    if (this.has_data) await this.extractLocationsFromRoute();
 
     // Get weather from route locations
     if (this.has_data) await this.getWeatherCityTrios();
 
     // Add weather informations to HTML
-    if (this.has_data) await this.addWeatherToInterface();
+    if (this.has_data && !this.api_error_occurence) await this.addWeatherToInterface();
+
+    // Communicate if there is any API error ocurrence
+    if(this.api_error_occurence) {
+      alert("An error has occurred in the API, please try again later.");
+    }
 
     this.is_loading = false;
   }
@@ -129,11 +134,6 @@ export class ViewRouteComponent {
     }).addTo(this.map);
   }
 
-  // Calculate center between two coordinates
-  calculateCenterCoordinates(point_A: number[], point_B: number[]) {
-    return [(Number(point_A[0]) + Number(point_B[0])) / 2, (Number(point_A[1]) + Number(point_B[1])) / 2];
-  };
-
   // Create route from starting location to destination
   async buildRoute() {
     this.itenerary = L.Routing.control({
@@ -150,21 +150,9 @@ export class ViewRouteComponent {
     await new Promise(resolve => setTimeout(resolve, 2000));
   }
 
-  // Extract locations from route
-  // Type:
-  // 1 - Extract locations names that route passes by - less efficient
-  // 2 - Extract locations coordinates that route passes by
-  async extractLocationsFromRoute(type: number) {
-    switch (type) {
-      case 1: {
-        this.locations_names = await this.locationsService.getRouteLocationsNames(this.itenerary._selectedRoute.coordinates)
-        break;
-      }
-      case 2: {
-        this.locations_coordinates = await this.locationsService.getRouteLocationsCoordinates(this.itenerary._selectedRoute.coordinates)
-        break;
-      }
-    }
+  // Extract locations coordinates that route passes by
+  async extractLocationsFromRoute() {
+    this.locations_coordinates = await this.locationsService.getRouteLocationsCoordinates(this.itenerary._selectedRoute.coordinates)
   }
 
   // Get trios degrees-city-weather for all locations coordinates
@@ -176,10 +164,17 @@ export class ViewRouteComponent {
     // Extract weather for each location
     for (let i = 0; i < this.locations_coordinates.length; i++) {
       let response = await this.weatherService.getWeatherAndCityNameByCoordinates(this.locations_coordinates[i], last_coordinates, last_date);
-      this.locations_weather_map.set(response[1]!, [Number(response[0]!), response[2]!, response[3]!]);
-      // Update last location values to calculate new driving times
-      last_coordinates = this.locations_coordinates[i];
-      last_date = response[4]!;
+      // Check if there is any API error
+      if (response[0] == "api_error") {
+        this.api_error_occurence = true;
+        return;
+      }
+      else {
+        this.locations_weather_map.set(response[1]!, [Number(response[0]!), response[2]!, response[3]!]);
+        // Update last location values to calculate new driving times
+        last_coordinates = this.locations_coordinates[i];
+        last_date = response[4]!;
+      }
     }
   }
 
@@ -212,10 +207,10 @@ export class ViewRouteComponent {
 
   // Convert HTML div to PDF and download it
   downloadPDF() {
-    if (!this.has_data || this.is_loading){
+    if (!this.has_data || this.is_loading || this.api_error_occurence) {
       alert("No data available.");
       return;
-    } 
+    }
 
     // Create body with weather info
     let doc_definition_body = [];
@@ -225,7 +220,7 @@ export class ViewRouteComponent {
     }
 
     // Create pdfmake dd variable
-    let doc_definition  = {
+    let doc_definition = {
       content: [
         {
           table: {

@@ -8,12 +8,24 @@ export class utilsService {
 
     constructor() { }
 
+    // Calculate center between two coordinates
+    calculateCenterCoordinates(point_A: number[], point_B: number[]) {
+        return [(Number(point_A[0]) + Number(point_B[0])) / 2, (Number(point_A[1]) + Number(point_B[1])) / 2];
+    };
+
     // Get driving time from one place to another
+    // If return -1: API error ocurrence
     async getDrivingTime(start: [number, number], end: [number, number]) {
+        let driving_time = -1;
+
         const route_url = `https://dev.virtualearth.net/REST/v1/Routes/Driving?wp.0=${start[0]},${start[1]}&wp.1=${end[0]},${end[1]}&key=${environment.bigmaps_api_key}`;
-        const response = await fetch(route_url);
-        const data = await response.json();
-        const driving_time = data.resourceSets[0].resources[0].travelDuration;
+        await fetch(route_url)
+            .then((response) => response.json())
+            .then((data) => driving_time = data.resourceSets[0].resources[0].travelDuration)
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
         return driving_time;
     }
 
@@ -44,31 +56,31 @@ export class utilsService {
 
     // Returns the icon associated with each weather ID
     getWeatherIconFromWeatherID(id: number) {
-        if(id >= 200 && id <= 232) {
+        if (id >= 200 && id <= 232) {
             return "../assets/images/weather_icons/storm.png";
         }
 
-        if(id >= 300 && id <= 321) {
+        if (id >= 300 && id <= 321) {
             return "../assets/images/weather_icons/cloud_rain_sun.png";
         }
 
-        if(id >= 500 && id <= 531) {
+        if (id >= 500 && id <= 531) {
             return "../assets/images/weather_icons/rain.png";
         }
 
-        if(id >= 600 && id <= 622) {
+        if (id >= 600 && id <= 622) {
             return "../assets/images/weather_icons/snow.png";
         }
 
-        if(id >= 701 && id <= 781) {
+        if (id >= 701 && id <= 781) {
             return "../assets/images/weather_icons/cloud_rain_sun.png";
         }
 
-        if(id == 800) {
+        if (id == 800) {
             return "../assets/images/weather_icons/sun.png";
         }
 
-        if(id >= 801 && id <= 804) {
+        if (id >= 801 && id <= 804) {
             return "../assets/images/weather_icons/cloud.png";
         }
 
