@@ -32,7 +32,10 @@ export class ViewRouteComponent {
   public porto_portugal_coordinates = [41.14961, -8.61099]
   public route_max_distance: number = 7000000;
   public locations_coordinates: any[] = [];
-  public locations_weather_map = new Map<string, [number, string, string]>();
+  // Map: 
+  // Key: Location name
+  // Values: [Degrees, Weather Code, Weather Description/Type, Estimated Driving Time, Weather Date]
+  public locations_weather_map = new Map<string, [number, string, string, string, string]>();
   public weather_info_is_open: boolean = false; // Variable that defines the weather information display 
 
   constructor(private route: ActivatedRoute,
@@ -170,7 +173,7 @@ export class ViewRouteComponent {
         return;
       }
       else {
-        this.locations_weather_map.set(response[1]!, [Number(response[0]!), response[2]!, response[3]!]);
+        this.locations_weather_map.set(response[1]!, [Number(response[0]!), response[2]!, response[3]!, response[4]!, response[5]!]);
         // Update last location values to calculate new driving times
         last_coordinates = this.locations_coordinates[i];
         last_date = response[4]!;
@@ -214,9 +217,9 @@ export class ViewRouteComponent {
 
     // Create body with weather info
     let doc_definition_body = [];
-    doc_definition_body.push(['Location', 'Degree Celsius', 'Weather']);
+    doc_definition_body.push(['Location', 'Degree Celsius', 'Weather', 'Estimated date of arrival', 'Forecast date']);
     for (let [key, value] of this.locations_weather_map) {
-      doc_definition_body.push([key, value[0], value[2]]);
+      doc_definition_body.push([key, value[0], value[2], value[3], value[4]]);
     }
 
     // Create pdfmake dd variable
