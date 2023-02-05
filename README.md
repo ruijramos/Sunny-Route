@@ -43,7 +43,7 @@ ng serve --open
 3. https://api.openweathermap.org/data/2.5/forecast/: Get weather forecast for given coordinates.
 4. https://dev.virtualearth.net/REST/: Get driving time from one location to another.
 
-## Used languages/Frameworks 💻
+## Used languages/frameworks 💻
 
 <div>
   <img src="https://github.com/devicons/devicon/blob/master/icons/angularjs/angularjs-original.svg" title="Angular" alt="Angular" width="40" height="40"/>&nbsp;
