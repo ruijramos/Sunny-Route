@@ -45,6 +45,10 @@ export class utilsService {
             }
         }
 
+        if (Math.abs(arr[left].dt - target_timestamp) >= Math.abs(arr[left - 1].dt - target_timestamp)) {
+            return left - 1;
+        }
+
         return left;
     }
 
