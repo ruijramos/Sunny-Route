@@ -42,6 +42,7 @@ ng serve --open
 2. https://nominatim.openstreetmap.org/: Get location coordinates from string adress, and extract location name from coordinates.
 3. https://api.openweathermap.org/data/2.5/forecast/: Get weather forecast for given coordinates.
 4. https://dev.virtualearth.net/REST/: Get driving time from one location to another.
+5. https://github.com/geoapify/geocoder-autocomplete: Autocomplete locations in the search bar.
 
 ## Used languages/frameworks 💻
 
