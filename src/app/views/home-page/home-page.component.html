@@ -15,26 +15,12 @@
 
         <div class="form-group">
           <label for="starting-location">From:</label>
-          <input type="text" list="departure-cities-list" (ngModelChange)="buildDepartureLocationDatalist()"
-            id="starting-location" placeholder="Departure location" [(ngModel)]="starting_location"
-            name="startingLocation" autocomplete="off" required>
-          <datalist id="departure-cities-list">
-            <option *ngFor="let city of departure_cities_list" [value]="city">
-              {{ city }}
-            </option>
-          </datalist>
+          <geoapify-geocoder-autocomplete (placeSelect)="onDepartureLocationSelected($event)" id="starting-location" placeholder="Departure location" name="startingLocation" required></geoapify-geocoder-autocomplete>
         </div>
 
         <div class="form-group">
           <label for="destination">To:</label>
-          <input type="text" list="destination_cities_list" (ngModelChange)="buildDestinationLocationDatalist()"
-            id="destination" placeholder="Arrival location" [(ngModel)]="destination" name="destination"
-            autocomplete="off" required>
-          <datalist id="destination_cities_list">
-            <option *ngFor="let city of destination_cities_list" [value]="city">
-              {{ city }}
-            </option>
-          </datalist>
+          <geoapify-geocoder-autocomplete (placeSelect)="onDestinationLocationSelected($event)" id="destination" placeholder="Arrival location" name="destination" required></geoapify-geocoder-autocomplete>
         </div>
 
         <div class="form-group">

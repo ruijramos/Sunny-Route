@@ -9,19 +9,22 @@ export class weatherService {
 
     constructor(private utilsService: utilsService) { }
 
-    // Get quartets degrees-city-weather(code)-weather(type/description) for location coordinates + most recent estimated driving time +  most recent used date to calculate weather
+    // Get objects: degrees, city name, weather(code), weather(type/description), most recent estimated driving time, most recent used date to calculate weather
     // If ["api_error"] - API error ocurrence
-    async getWeatherAndCityNameByCoordinates(coodinates: number[], starting_location_coordinates: any[], date: string) {
+    async getCitiesWeatherAndTimeInformations(coodinates: number[],
+        starting_location_coordinates: any[],
+        date: string) {
+
         let weather_degrees;
         let city_name;
         let weather_code;
         let weather_description;
         let has_error: boolean = false;
- 
+
         // Get driving time from start location to current location and add it to timestamp
         let driving_time = await this.utilsService.getDrivingTime([Number(starting_location_coordinates[0]), Number(starting_location_coordinates[1])], [coodinates[0], coodinates[1]])
         // Check if there is any API error occurence
-        if(driving_time==-1) {
+        if (driving_time == -1) {
             has_error = true;
             return ["api_error"];
         }
@@ -30,7 +33,7 @@ export class weatherService {
         let timestamp_start_date = this.utilsService.toTimestamp(date);
         let human_format_start_date = new Date(timestamp_start_date * 1000);
         human_format_start_date.setSeconds(human_format_start_date.getSeconds() + driving_time); // Add driving time
-        let timestamp_new_date = human_format_start_date.getTime() / 1000; 
+        let timestamp_new_date = human_format_start_date.getTime() / 1000;
 
         // Weather date - forecast date
         var weather_forecast_date;
@@ -51,12 +54,24 @@ export class weatherService {
                 console.error('Error:', error);
                 has_error = true;
             });
-        
+
         // Return most recent date to calculate new driving times on the next iteration
-        var estimated_driving_date = new Date(human_format_start_date).toISOString().split(".", 1)[0];
+        var start_date = new Date(human_format_start_date);
+        var estimated_driving_date = start_date.getFullYear() + '-' +
+            String(start_date.getMonth() + 1).padStart(2, '0') + '-' +
+            String(start_date.getDate()).padStart(2, '0') + 'T' +
+            String(start_date.getHours()).padStart(2, '0') + ':' +
+            String(start_date.getMinutes()).padStart(2, '0') + ':' +
+            String(start_date.getSeconds()).padStart(2, '0');
         estimated_driving_date = estimated_driving_date.split("T", 2)[0] + " " + estimated_driving_date.split("T", 2)[1];
 
-        if(has_error) return ["api_error"];
-        return [weather_degrees, city_name, weather_code, weather_description, estimated_driving_date, weather_forecast_date];
+        if (has_error) return ["api_error"];
+        return [weather_degrees,
+            city_name,
+            weather_code,
+            weather_description,
+            estimated_driving_date,
+            weather_forecast_date];
+
     }
 }

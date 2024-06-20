@@ -12,8 +12,8 @@ export class HomePageComponent {
 
   public departure_cities_list: Array<any> = [];
   public destination_cities_list: Array<any> = [];
-  public starting_location: string = '';
-  public destination: string = '';
+  public starting_location: any;
+  public destination: any;
   public date: string = '';
   public today_date: string = '';
   public five_days_date: string = '';
@@ -23,57 +23,34 @@ export class HomePageComponent {
               private locationsService: locationsService) {}
 
   ngOnInit() {
+
     // Create the range of possible dates - today -> 5 days
     const today = new Date();
     this.today_date = today.toISOString().slice(0, 10) + "T00:00";
     const five_days_later = new Date(today.getTime() + 5 * 24 * 60 * 60 * 1000);
     this.five_days_date = five_days_later.toISOString().slice(0, 10) + "T00:00";
+
   }
 
-  // Create the suggestions datalist for the search box
-  async buildDepartureLocationDatalist() {
-    let user_typed_text = (<HTMLInputElement>document.getElementById("starting-location")).value;
-    let cities_data = await this.locationsService.getCitiesInSearch(user_typed_text);
+  onDepartureLocationSelected(place: any): void {
 
-    this.departure_cities_list = []
-    for (let i = 0; i < cities_data.length; i++) {
-      this.departure_cities_list.push(cities_data[i].matching_full_name);
-    }
+    this.starting_location = place;
+
   }
 
-  // Create the suggestions datalist for the search box
-  async buildDestinationLocationDatalist() {
-    let user_typed_text = (<HTMLInputElement>document.getElementById("destination")).value;
-    let cities_data = await this.locationsService.getCitiesInSearch(user_typed_text);
+  onDestinationLocationSelected(place: any): void {
 
-    this.destination_cities_list = []
-    for (let i = 0; i < cities_data.length; i++) {
-      this.destination_cities_list.push(cities_data[i].matching_full_name);
-    }
+    this.destination = place;
+
   }
 
   async submitForm() {
+    
     this.is_loading = true;
 
     // Check if the form is filled out
-    if (this.starting_location == "" || this.destination == "" || this.date == "") {
+    if (this.starting_location == null || this.destination == null || this.date == "") {
       alert("You must fill out the form properly before creating the route.");
-      this.is_loading = false;
-      return;
-    }
-
-    // Check if locations really exist. 
-    let start_coordinates = await this.locationsService.getCoordinatesFromAdress(this.starting_location);
-    let destination_coordinates = await this.locationsService.getCoordinatesFromAdress(this.destination);
-    if (start_coordinates.length == 0 || destination_coordinates.length == 0) {
-      alert("The inserted locations must exist.");
-      this.is_loading = false;
-      return;
-    }
-    // API error check
-    if ((start_coordinates[0] == 0 && start_coordinates[1] == 0) || 
-        (destination_coordinates[0] == 0 && destination_coordinates[1] == 0)) {
-      alert("An error has occurred in the API, please try again later.");
       this.is_loading = false;
       return;
     }
@@ -90,10 +67,10 @@ export class HomePageComponent {
     this.router.navigate(['/view-route'],
       {
         queryParams: {
-          starting_location: this.starting_location,
-          starting_location_coordinates: start_coordinates,
-          destination: this.destination,
-          destination_coordinates: destination_coordinates,
+          starting_location: this.starting_location.properties.formatted,
+          starting_location_coordinates: [this.starting_location.properties.lat, this.starting_location.properties.lon], // [lat, lon]
+          destination: this.destination.properties.formatted,
+          destination_coordinates: [this.destination.properties.lat, this.destination.properties.lon], // [lat, lon]
           date: this.date
         }
       }
@@ -101,6 +78,7 @@ export class HomePageComponent {
 
     this.is_loading = false;
     return;
+
   }
 
 }

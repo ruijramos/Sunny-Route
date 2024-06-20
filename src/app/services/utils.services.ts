@@ -9,13 +9,20 @@ export class utilsService {
     constructor() { }
 
     // Calculate center between two coordinates
-    calculateCenterCoordinates(point_A: number[], point_B: number[]) {
+    calculateCenterCoordinates(
+        point_A: number[],
+        point_B: number[]
+    ) {
+
         return [(Number(point_A[0]) + Number(point_B[0])) / 2, (Number(point_A[1]) + Number(point_B[1])) / 2];
+
     };
 
     // Get driving time from one place to another
     // If return -1: API error ocurrence
-    async getDrivingTime(start: [number, number], end: [number, number]) {
+    async getDrivingTime(start: [number, number],
+        end: [number, number]) {
+
         let driving_time = -1;
 
         const route_url = `https://dev.virtualearth.net/REST/v1/Routes/Driving?wp.0=${start[0]},${start[1]}&wp.1=${end[0]},${end[1]}&key=${environment.bigmaps_api_key}`;
@@ -27,10 +34,13 @@ export class utilsService {
             });
 
         return driving_time;
+
     }
 
     // Binary search to find the index of the array that contains the timestamp closest to the specified targetTimestamp. 
-    findClosestTimestamp(arr: any[], target_timestamp: number) {
+    findClosestTimestamp(arr: any[],
+        target_timestamp: number) {
+
         let left = 0;
         let right = arr.length - 1;
 
@@ -50,16 +60,20 @@ export class utilsService {
         }
 
         return left;
+
     }
 
     // String date to timestamp
     toTimestamp(strDate: string) {
+
         let datum = Date.parse(strDate);
         return datum / 1000;
+
     }
 
     // Returns the icon associated with each weather ID
     getWeatherIconFromWeatherID(id: number) {
+
         if (id >= 200 && id <= 232) {
             return "../assets/images/weather_icons/storm.png";
         }
@@ -89,6 +103,7 @@ export class utilsService {
         }
 
         return "";
+
     }
 
 }

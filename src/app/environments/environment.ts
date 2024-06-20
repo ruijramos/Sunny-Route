@@ -8,5 +8,7 @@ export const environment = {
     openweathermap_api_url: "https://api.openweathermap.org/data/2.5/forecast",
     openweathermap_api_key: "YOUR_API_KEY",
 
-    bigmaps_api_key: "YOUR_API_KEY"
+    bigmaps_api_key: "YOUR_API_KEY",
+
+    geoapify_geocoder_autocomplete_key: "YOUR_API_KEY"
 };

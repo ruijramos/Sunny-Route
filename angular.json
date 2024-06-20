@@ -28,6 +28,7 @@
               "@angular/material/prebuilt-themes/indigo-pink.css",
               "./node_modules/leaflet/dist/leaflet.css",
               "./node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.css",
+              "node_modules/@geoapify/geocoder-autocomplete/styles/round-borders.css",
               "src/styles.css"
             ],
             "scripts": [
@@ -95,6 +96,7 @@
               "@angular/material/prebuilt-themes/indigo-pink.css",
               "./node_modules/leaflet/dist/leaflet.css",
               "./node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.css",
+              "node_modules/@geoapify/geocoder-autocomplete/styles/round-borders.css",
               "src/styles.css"
             ],
             "scripts": [
@@ -104,5 +106,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

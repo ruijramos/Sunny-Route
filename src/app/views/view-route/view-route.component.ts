@@ -9,6 +9,7 @@ import { Margins } from 'pdfmake/interfaces';
 import { locationsService } from '../../services/locations.services';
 import { weatherService } from '../../services/weather.services';
 import { utilsService } from '../../services/utils.services';
+import { last } from 'rxjs';
 
 @Component({
   selector: 'app-view-route',
@@ -23,27 +24,34 @@ export class ViewRouteComponent {
   public destination: string = '';
   public destination_coordinates: number[] = [];
   public date: string = '';
+
   public date_formated: string = '';
+
   public has_data: boolean = false;
   public api_error_occurence = false;
   public is_loading: boolean = false;
+  public route_max_distance: number = 7000000;
+
   public map: any;
   public itenerary: any;
+
+  // Best city!
   public porto_portugal_coordinates = [41.14961, -8.61099]
-  public route_max_distance: number = 7000000;
+
   public locations_coordinates: any[] = [];
   // Map: 
   // Key: Location name
   // Values: [Degrees, Weather Code, Weather Description/Type, Estimated Driving Time, Weather Date]
   public locations_weather_map = new Map<string, [number, string, string, string, string]>();
-  public weather_info_is_open: boolean = false; // Variable that defines the weather information display 
+  public weather_info_is_open: boolean = false; // Variable that defines the weather information sidebar display 
 
   constructor(private route: ActivatedRoute,
-    private locationsService: locationsService,
-    private weatherService: weatherService,
-    private utilsService: utilsService) { }
+              private locationsService: locationsService,
+              private weatherService: weatherService,
+              private utilsService: utilsService) { }
 
   async ngOnInit() {
+
     this.is_loading = true;
 
     // Get form data from home page
@@ -56,7 +64,7 @@ export class ViewRouteComponent {
         this.date = params['date'];
       }
       );
-
+    
     // Check if there is data coming from the form.
     if (this.starting_location_coordinates === undefined || this.destination_coordinates === undefined || this.date === undefined) {
       this.has_data = false;
@@ -94,7 +102,7 @@ export class ViewRouteComponent {
     if (this.has_data) await this.extractLocationsFromRoute();
 
     // Get weather from route locations
-    if (this.has_data) await this.getWeatherCityTrios();
+    if (this.has_data) await this.getTravelInformations();
 
     // Add weather informations to HTML
     if (this.has_data && !this.api_error_occurence) await this.addWeatherToInterface();
@@ -105,15 +113,17 @@ export class ViewRouteComponent {
     }
 
     this.is_loading = false;
+
   }
 
   // Check if the date entered is between the current date and the following 5 days
   checkDateInterval() {
+
     if (!this.has_data) return false;
 
     const choosen_date = new Date(this.date + ":00.000Z");
     const current_date = new Date();
-    const five_days_later = new Date(current_date)
+    const five_days_later = new Date(current_date);
     five_days_later.setDate(current_date.getDate() + 5);
 
     // Format the date correctly
@@ -121,10 +131,12 @@ export class ViewRouteComponent {
 
     if (current_date <= choosen_date && five_days_later >= choosen_date) return true;
     else return false;
+
   }
 
   // Initialize and center map
   initMap(center: number[]) {
+
     this.map = L.map('map').setView([center[0], center[1]], 6);
     this.map.zoomControl.remove();
     L.control.zoom({
@@ -135,10 +147,12 @@ export class ViewRouteComponent {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
+
   }
 
   // Create route from starting location to destination
   async buildRoute() {
+
     this.itenerary = L.Routing.control({
       show: false,
       addWaypoints: false,
@@ -151,22 +165,26 @@ export class ViewRouteComponent {
 
     // Wait 2 seconds to build route and retrieve information -> Yes, it needs to be optimized (but by LRM owner)
     await new Promise(resolve => setTimeout(resolve, 2000));
+
   }
 
   // Extract locations coordinates that route passes by
   async extractLocationsFromRoute() {
-    this.locations_coordinates = await this.locationsService.getRouteLocationsCoordinates(this.itenerary._selectedRoute.coordinates)
+
+    this.locations_coordinates = await this.locationsService.getRouteLocationsCoordinates(this.itenerary._selectedRoute.coordinates);
+
   }
 
-  // Get trios degrees-city-weather for all locations coordinates
-  async getWeatherCityTrios() {
+  // Get informations about city name, weather, time... for all cordinatinates groups
+  async getTravelInformations() {
+
     // Calculating only the driving time between the last coordinate and the current one, preserving the estimated arrival time, significantly improves performance
     let last_coordinates = this.starting_location_coordinates;
     let last_date = this.date_formated;
 
     // Extract weather for each location
     for (let i = 0; i < this.locations_coordinates.length; i++) {
-      let response = await this.weatherService.getWeatherAndCityNameByCoordinates(this.locations_coordinates[i], last_coordinates, last_date);
+      let response = await this.weatherService.getCitiesWeatherAndTimeInformations(this.locations_coordinates[i], last_coordinates, last_date);
       // Check if there is any API error
       if (response[0] == "api_error") {
         this.api_error_occurence = true;
@@ -179,10 +197,12 @@ export class ViewRouteComponent {
         last_date = response[4]!;
       }
     }
+
   }
 
   // Add dynamic divs with weather information
   addWeatherToInterface() {
+
     for (let [key, value] of this.locations_weather_map) {
       let weather_icon = this.utilsService.getWeatherIconFromWeatherID(Number(value[1]));
 
@@ -206,10 +226,12 @@ export class ViewRouteComponent {
 
       (<HTMLInputElement>document.getElementById("dinamic-weather-elements")).appendChild(div_parent_container);
     }
+
   }
 
   // Convert HTML div to PDF and download it
   downloadPDF() {
+
     if (!this.has_data || this.is_loading || this.api_error_occurence) {
       alert("No data available.");
       return;
@@ -283,7 +305,9 @@ export class ViewRouteComponent {
 
   // Hamburguer menu to switch display of sidebar
   toggleWeatherInfoSidebar() {
+
     this.weather_info_is_open = !this.weather_info_is_open;
+
   }
 
 }

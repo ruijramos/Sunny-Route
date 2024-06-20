@@ -19,7 +19,8 @@
 
 .form-title {
     color: #39393A;
-    font-weight: 500; /* Semi-Bold */
+    font-weight: 500;
+    /* Semi-Bold */
 
     text-align: center;
 
@@ -43,15 +44,22 @@ form {
     margin-bottom: 1rem;
 }
 
-input {
-    width: 98%;
+input[type="datetime-local"] {
+    /* Change padding without chaning width */
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    
+    width: 100%;
 
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     padding-left: 0.5rem;
+    padding-right: 0.5rem;
 
     border: 1px solid #ccc;
     border-radius: 0.25rem;
+
 }
 
 input::placeholder {
@@ -94,7 +102,7 @@ button[type="submit"]:hover {
 }
 
 /* new Galaxy Folds */
-@media(max-width: 320px){ 
+@media(max-width: 320px) {
 
     .form-title {
         font-size: 1rem;
@@ -122,8 +130,8 @@ button[type="submit"]:hover {
 
 }
 
-/* smartphones, iPhone, portrait 480x320 phones */ 
-@media (min-width:320px)  { 
+/* smartphones, iPhone, portrait 480x320 phones */
+@media (min-width:320px) {
 
     .form-title {
         font-size: 1.2rem;
@@ -151,8 +159,8 @@ button[type="submit"]:hover {
 
 }
 
-/* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */ 
-@media (min-width:481px)  {
+/* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
+@media (min-width:481px) {
 
     .form-title {
         font-size: 1.2rem;
@@ -180,8 +188,8 @@ button[type="submit"]:hover {
 
 }
 
-/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */ 
-@media (min-width:641px)  { 
+/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+@media (min-width:641px) {
 
     .form-title {
         font-size: 1.5rem;
@@ -209,8 +217,8 @@ button[type="submit"]:hover {
 
 }
 
-/* tablet, landscape iPad, lo-res laptops ands desktops */ 
-@media (min-width:961px)  { 
+/* tablet, landscape iPad, lo-res laptops ands desktops */
+@media (min-width:961px) {
 
     .form-title {
         font-size: calc(1em + .5vw);
@@ -238,8 +246,8 @@ button[type="submit"]:hover {
 
 }
 
-/* big landscape tablets, laptops, and desktops */ 
-@media (min-width:1025px) { 
+/* big landscape tablets, laptops, and desktops */
+@media (min-width:1025px) {
 
     .form-title {
         font-size: calc(0.8em + .5vw);
@@ -268,26 +276,26 @@ button[type="submit"]:hover {
 }
 
 /* hi-res laptops and desktops */
-@media (min-width:1281px) { 
+@media (min-width:1281px) {
 
     .form-title {
-        font-size: calc(0.6em + .5vw);
+        font-size: min(calc(0.6em + .5vw), 1.4em);
     }
 
     label {
-        font-size: calc(0.3em + .5vw);
+        font-size: min(calc(0.3em + .5vw), 1.1em);
     }
 
     input {
-        font-size: calc(0.2rem + .5vw);
+        font-size: min(calc(0.2rem + .5vw), 1.0em);
     }
 
     input::placeholder {
-        font-size: calc(0.2rem + .5vw);
+        font-size: min(calc(0.2rem + .5vw), 1.0em);
     }
 
     #submit-button {
-        font-size: calc(0.3em + .5vw);
+        font-size: min(calc(0.3em + .5vw), 1.1em);
     }
 
     #app-logo {

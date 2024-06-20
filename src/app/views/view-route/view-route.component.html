@@ -30,7 +30,7 @@
           <span class="route-info">{{date_formated}}</span>
         </div>
         <div id="dinamic-weather-elements">
-          <div *ngIf="is_loading" class="loading-nodata-card">
+          <div *ngIf="is_loading && has_data" class="loading-nodata-card">
             Loading weather informations...
           </div>
           <div *ngIf="!has_data || api_error_occurence" class="loading-nodata-card">
