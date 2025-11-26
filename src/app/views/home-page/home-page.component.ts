@@ -1,9 +1,17 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { locationsService } from '../../services/locations.services';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { GeoapifyGeocoderAutocompleteModule } from '@geoapify/angular-geocoder-autocomplete';
+import { environment } from 'src/app/environments/environment';
+
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-home-page',
+  standalone: true,
+  imports: [CommonModule, FormsModule, GeoapifyGeocoderAutocompleteModule, MatIconModule],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css']
 })
@@ -20,7 +28,7 @@ export class HomePageComponent {
   public is_loading: boolean = false;
 
   constructor(private router: Router,
-              private locationsService: locationsService) {}
+    private locationsService: locationsService) { }
 
   ngOnInit() {
 
@@ -45,7 +53,7 @@ export class HomePageComponent {
   }
 
   async submitForm() {
-    
+
     this.is_loading = true;
 
     // Check if the form is filled out

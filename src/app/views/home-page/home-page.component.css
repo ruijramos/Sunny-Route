@@ -3,303 +3,279 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin: auto;
-
-    width: 100%;
-    max-width: 60rem;
-    min-height: 90vh;
+    min-height: 100vh;
+    padding: 2rem;
 }
 
 .form-container {
-    width: 90%;
-
-    margin-top: 2em;
-    margin-bottom: 2em;
+    width: 100%;
+    max-width: 480px;
+    margin-bottom: 3rem;
+    animation: fadeInUp 0.8s ease-out;
 }
 
 .form-title {
-    color: #39393A;
-    font-weight: 500;
-    /* Semi-Bold */
-
+    color: #1a3c5e;
+    font-weight: 800;
     text-align: center;
-
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 2.5rem;
+    font-size: 2.2rem;
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 form {
-    background-color: white;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease;
+}
 
-    padding: 1rem 2rem 1rem 2rem;
-    margin: auto;
+form:hover {
+    transform: translateY(-5px);
+}
 
-    border-radius: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.journey-container {
+    position: relative;
+    margin-bottom: 2rem;
+    isolation: isolate;
+    z-index: 10;
+}
 
-    display: block;
+.journey-container .form-group:nth-child(2) {
+    z-index: 20;
+}
+
+.journey-container .form-group:nth-child(3) {
+    z-index: 10;
+}
+
+.journey-line {
+    position: absolute;
+    left: 19px;
+    top: 50px;
+    bottom: 50px;
+    width: 2px;
+    background: repeating-linear-gradient(to bottom, #bdc3c7 0, #bdc3c7 6px, transparent 6px, transparent 12px);
+    z-index: 0;
+    transform: translateX(-50%);
 }
 
 .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
 }
 
-input[type="datetime-local"] {
-    /* Change padding without chaning width */
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    
-    width: 100%;
-
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-
-    border: 1px solid #ccc;
-    border-radius: 0.25rem;
-
+.input-icon-wrapper {
+    display: flex;
+    align-items: flex-end;
+    gap: 1.2rem;
 }
 
-input::placeholder {
-    color: #39393A;
+.input-icon {
+    color: #7f8c8d;
+    background: #fff;
+    padding: 8px;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ecf0f1;
+    flex-shrink: 0;
+    margin-bottom: 4px;
+}
+
+.start-icon {
+    color: #3498db;
+}
+
+.end-icon {
+    color: #e74c3c;
+}
+
+.date-icon {
+    color: #f39c12;
+}
+
+.input-content {
+    flex: 1;
+    min-width: 0;
 }
 
 label {
-    font-weight: bold;
-    color: #39393A;
+    display: block;
+    font-weight: 700;
+    color: #34495e;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
 }
 
-button[type="submit"] {
-    background-color: #37ACE3;
-    color: white;
-
-    padding: 0.75rem 1.5rem;
-    margin-top: 1rem;
-
-    border: none;
-    border-radius: 0.25rem;
-
-    cursor: pointer;
+input[type="datetime-local"] {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 1px solid #dfe6e9;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #fff;
+    color: #2c3e50;
+    font-family: inherit;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
-button[type="submit"]:hover {
-    background-color: #73C4EB;
+input[type="datetime-local"]:focus {
+    outline: none;
+    background: #fff;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(55, 172, 227, 0.15);
+}
+
+::ng-deep .geoapify-autocomplete-input {
+    width: 100%;
+    padding: 0.9rem 1rem !important;
+    border: 1px solid #dfe6e9 !important;
+    border-radius: 12px !important;
+    font-size: 1rem !important;
+    transition: all 0.3s ease;
+    background: #fff;
+    color: #2c3e50;
+    font-family: inherit;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+::ng-deep .geoapify-autocomplete-input:focus {
+    outline: none;
+    background: #fff;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 4px 12px rgba(55, 172, 227, 0.15);
 }
 
 .button-container {
     display: flex;
-
     justify-content: center;
+    margin-top: 2.5rem;
+}
 
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+button[type="submit"] {
+    background: linear-gradient(135deg, #37ACE3 0%, #2188c9 100%);
+    color: white;
+    padding: 1.2rem 3rem;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 20px rgba(55, 172, 227, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+button[type="submit"]:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(55, 172, 227, 0.5);
+    background: linear-gradient(135deg, #4bbbf0 0%, #299cdb 100%);
+}
+
+button[type="submit"]:active {
+    transform: translateY(-1px);
 }
 
 #app-logo {
-    margin-bottom: 2rem;
+    width: 120px;
+    opacity: 0.8;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    transition: all 0.3s ease;
+    margin-top: 2rem;
 }
 
-/* new Galaxy Folds */
-@media(max-width: 320px) {
-
-    .form-title {
-        font-size: 1rem;
-    }
-
-    label {
-        font-size: 0.6rem;
-    }
-
-    input {
-        font-size: 0.5rem;
-    }
-
-    input::placeholder {
-        font-size: 0.5rem;
-    }
-
-    #submit-button {
-        font-size: 0.6rem;
-    }
-
-    #app-logo {
-        width: calc(3rem + .5vw);
-    }
-
+#app-logo:hover {
+    opacity: 1;
+    transform: scale(1.1) rotate(5deg);
 }
 
-/* smartphones, iPhone, portrait 480x320 phones */
-@media (min-width:320px) {
-
-    .form-title {
-        font-size: 1.2rem;
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
     }
 
-    label {
-        font-size: 0.8rem;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
-
-    input {
-        font-size: 0.7rem;
-    }
-
-    input::placeholder {
-        font-size: 0.7rem;
-    }
-
-    #submit-button {
-        font-size: 0.8rem;
-    }
-
-    #app-logo {
-        width: calc(3.2rem + .5vw);
-    }
-
 }
 
-/* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
-@media (min-width:481px) {
-
-    .form-title {
-        font-size: 1.2rem;
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    #global-container {
+        padding: 0.5rem;
     }
 
-    label {
-        font-size: 0.8rem;
+    .form-container {
+        margin-bottom: 1rem;
     }
 
-    input {
-        font-size: 0.7rem;
+    form {
+        padding: 1.5rem 1rem;
+        border-radius: 16px;
     }
-
-    input::placeholder {
-        font-size: 0.7rem;
-    }
-
-    #submit-button {
-        font-size: 0.8rem;
-    }
-
-    #app-logo {
-        width: calc(4.2rem + .5vw);
-    }
-
-}
-
-/* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
-@media (min-width:641px) {
 
     .form-title {
         font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .input-icon-wrapper {
+        gap: 0.8rem;
+    }
+
+    .input-icon {
+        width: 36px;
+        height: 36px;
+        padding: 6px;
+        margin-top: 0;
+    }
+
+    .journey-line {
+        left: 17px;
+        top: 40px;
+        bottom: 40px;
     }
 
     label {
-        font-size: 1.1rem;
+        font-size: 0.75rem;
+        margin-bottom: 0.3rem;
     }
 
-    input {
+    input[type="datetime-local"],
+    ::ng-deep .geoapify-autocomplete-input {
+        padding: 0.7rem 0.8rem !important;
+        font-size: 0.9rem !important;
+    }
+
+    button[type="submit"] {
+        padding: 0.9rem 2rem;
         font-size: 1rem;
-    }
-
-    input::placeholder {
-        font-size: 1rem;
-    }
-
-    #submit-button {
-        font-size: 1.1rem;
+        width: 100%;
     }
 
     #app-logo {
-        width: calc(4.2rem + .5vw);
+        width: 100px;
+        margin-top: 1rem;
     }
-
-}
-
-/* tablet, landscape iPad, lo-res laptops ands desktops */
-@media (min-width:961px) {
-
-    .form-title {
-        font-size: calc(1em + .5vw);
-    }
-
-    label {
-        font-size: calc(0.7em + .5vw);
-    }
-
-    input {
-        font-size: calc(0.6rem + .5vw);
-    }
-
-    input::placeholder {
-        font-size: calc(0.6rem + .5vw);
-    }
-
-    #submit-button {
-        font-size: calc(0.7em + .5vw);
-    }
-
-    #app-logo {
-        width: calc(4.2rem + .5vw);
-    }
-
-}
-
-/* big landscape tablets, laptops, and desktops */
-@media (min-width:1025px) {
-
-    .form-title {
-        font-size: calc(0.8em + .5vw);
-    }
-
-    label {
-        font-size: calc(0.5em + .5vw);
-    }
-
-    input {
-        font-size: calc(0.4rem + .5vw);
-    }
-
-    input::placeholder {
-        font-size: calc(0.4rem + .5vw);
-    }
-
-    #submit-button {
-        font-size: calc(0.5em + .5vw);
-    }
-
-    #app-logo {
-        width: calc(4.2rem + .5vw);
-    }
-
-}
-
-/* hi-res laptops and desktops */
-@media (min-width:1281px) {
-
-    .form-title {
-        font-size: min(calc(0.6em + .5vw), 1.4em);
-    }
-
-    label {
-        font-size: min(calc(0.3em + .5vw), 1.1em);
-    }
-
-    input {
-        font-size: min(calc(0.2rem + .5vw), 1.0em);
-    }
-
-    input::placeholder {
-        font-size: min(calc(0.2rem + .5vw), 1.0em);
-    }
-
-    #submit-button {
-        font-size: min(calc(0.3em + .5vw), 1.1em);
-    }
-
-    #app-logo {
-        width: calc(4.2rem + .5vw);
-    }
-
 }

@@ -25,10 +25,21 @@ export class utilsService {
 
         let driving_time = -1;
 
-        const route_url = `https://dev.virtualearth.net/REST/v1/Routes/Driving?wp.0=${start[0]},${start[1]}&wp.1=${end[0]},${end[1]}&key=${environment.bigmaps_api_key}`;
+        // OSRM API (Free)
+        // Note: OSRM takes coordinates in "lon,lat" format
+        // OSRM API (Free)
+        // Note: OSRM takes coordinates in "lon,lat" format
+        const route_url = `${environment.osrm_api_url}${start[1]},${start[0]};${end[1]},${end[0]}?overview=false`;
+
         await fetch(route_url)
             .then((response) => response.json())
-            .then((data) => driving_time = data.resourceSets[0].resources[0].travelDuration)
+            .then((data) => {
+                if (data.code === 'Ok' && data.routes && data.routes.length > 0) {
+                    driving_time = data.routes[0].duration;
+                } else {
+                    console.error('OSRM Error:', data);
+                }
+            })
             .catch((error) => {
                 console.error('Error:', error);
             });
@@ -74,35 +85,24 @@ export class utilsService {
     // Returns the icon associated with each weather ID
     getWeatherIconFromWeatherID(id: number) {
 
-        if (id >= 200 && id <= 232) {
-            return "../assets/images/weather_icons/storm.png";
+        switch (true) {
+            case (id >= 200 && id <= 232):
+                return "assets/images/weather_icons/storm.png";
+            case (id >= 300 && id <= 321):
+                return "assets/images/weather_icons/cloud_rain_sun.png";
+            case (id >= 500 && id <= 531):
+                return "assets/images/weather_icons/rain.png";
+            case (id >= 600 && id <= 622):
+                return "assets/images/weather_icons/snow.png";
+            case (id >= 701 && id <= 781):
+                return "assets/images/weather_icons/cloud_rain_sun.png";
+            case (id === 800):
+                return "assets/images/weather_icons/sun.png";
+            case (id >= 801 && id <= 804):
+                return "assets/images/weather_icons/cloud.png";
+            default:
+                return "";
         }
-
-        if (id >= 300 && id <= 321) {
-            return "../assets/images/weather_icons/cloud_rain_sun.png";
-        }
-
-        if (id >= 500 && id <= 531) {
-            return "../assets/images/weather_icons/rain.png";
-        }
-
-        if (id >= 600 && id <= 622) {
-            return "../assets/images/weather_icons/snow.png";
-        }
-
-        if (id >= 701 && id <= 781) {
-            return "../assets/images/weather_icons/cloud_rain_sun.png";
-        }
-
-        if (id == 800) {
-            return "../assets/images/weather_icons/sun.png";
-        }
-
-        if (id >= 801 && id <= 804) {
-            return "../assets/images/weather_icons/cloud.png";
-        }
-
-        return "";
 
     }
 

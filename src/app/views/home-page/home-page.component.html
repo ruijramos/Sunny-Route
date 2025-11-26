@@ -13,26 +13,52 @@
       <form>
         <h3 class="form-title">Let the journey begin!</h3>
 
-        <div class="form-group">
-          <label for="starting-location">From:</label>
-          <geoapify-geocoder-autocomplete (placeSelect)="onDepartureLocationSelected($event)" id="starting-location" placeholder="Departure location" name="startingLocation" required></geoapify-geocoder-autocomplete>
+        <div class="journey-container">
+          <div class="journey-line"></div>
+
+          <div class="form-group">
+            <div class="input-icon-wrapper">
+              <mat-icon class="input-icon start-icon">my_location</mat-icon>
+              <div class="input-content">
+                <label for="starting-location">From</label>
+                <geoapify-geocoder-autocomplete (placeSelect)="onDepartureLocationSelected($event)"
+                  id="starting-location" placeholder="Where are you starting?" name="startingLocation"
+                  required></geoapify-geocoder-autocomplete>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="input-icon-wrapper">
+              <mat-icon class="input-icon end-icon">location_on</mat-icon>
+              <div class="input-content">
+                <label for="destination">To</label>
+                <geoapify-geocoder-autocomplete (placeSelect)="onDestinationLocationSelected($event)" id="destination"
+                  placeholder="Where are you going?" name="destination" required></geoapify-geocoder-autocomplete>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="destination">To:</label>
-          <geoapify-geocoder-autocomplete (placeSelect)="onDestinationLocationSelected($event)" id="destination" placeholder="Arrival location" name="destination" required></geoapify-geocoder-autocomplete>
-        </div>
-
-        <div class="form-group">
-          <label for="date">Date:</label>
-          <input type="datetime-local" min={{today_date}} max={{five_days_date}} id="date" [(ngModel)]="date"
-            name="date" required>
+        <div class="form-group date-group">
+          <div class="input-icon-wrapper">
+            <mat-icon class="input-icon date-icon">calendar_today</mat-icon>
+            <div class="input-content">
+              <label for="date">When</label>
+              <input type="datetime-local" min={{today_date}} max={{five_days_date}} id="date" [(ngModel)]="date"
+                name="date" required>
+            </div>
+          </div>
         </div>
 
         <div class="button-container">
           <button id="submit-button" type="submit" (click)="submitForm()">
-            <span *ngIf="!is_loading">Show me the weather!</span>
-            <span *ngIf="is_loading">Loading...</span>
+            @if (!is_loading) {
+            <span>Show me the weather!</span>
+            }
+            @if (is_loading) {
+            <span>Loading...</span>
+            }
           </button>
         </div>
       </form>

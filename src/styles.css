@@ -1,9 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary-color: #37ACE3;
+    --secondary-color: #73C4EB;
+    --text-color: #333;
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.3);
+    --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
 * {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
 }
 
 body {
-    background-color: #37ACE3;
+    background: linear-gradient(135deg, #37ACE3 0%, #a2d9f5 100%);
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+    color: var(--text-color);
 }

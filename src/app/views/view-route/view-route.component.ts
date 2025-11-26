@@ -2,17 +2,20 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as L from 'leaflet';
 import 'leaflet-routing-machine';
-const pdfMake = require('pdfmake/build/pdfmake.js');
-import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-(pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
-import { Margins } from 'pdfmake/interfaces';
 import { locationsService } from '../../services/locations.services';
 import { weatherService } from '../../services/weather.services';
 import { utilsService } from '../../services/utils.services';
+import { PdfService } from '../../services/pdf.service';
 import { last } from 'rxjs';
+
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { WeatherInfo } from '../../models/weather.interface';
 
 @Component({
   selector: 'app-view-route',
+  standalone: true,
+  imports: [CommonModule, MatIconModule],
   templateUrl: './view-route.component.html',
   styleUrls: ['./view-route.component.css']
 })
@@ -39,16 +42,15 @@ export class ViewRouteComponent {
   public porto_portugal_coordinates = [41.14961, -8.61099]
 
   public locations_coordinates: any[] = [];
-  // Map: 
-  // Key: Location name
-  // Values: [Degrees, Weather Code, Weather Description/Type, Estimated Driving Time, Weather Date]
-  public locations_weather_map = new Map<string, [number, string, string, string, string]>();
+
+  public weatherList: { location: string, weather: WeatherInfo, icon: string }[] = [];
   public weather_info_is_open: boolean = false; // Variable that defines the weather information sidebar display 
 
   constructor(private route: ActivatedRoute,
-              private locationsService: locationsService,
-              private weatherService: weatherService,
-              private utilsService: utilsService) { }
+    private locationsService: locationsService,
+    private weatherService: weatherService,
+    private utilsService: utilsService,
+    private pdfService: PdfService) { }
 
   async ngOnInit() {
 
@@ -64,7 +66,7 @@ export class ViewRouteComponent {
         this.date = params['date'];
       }
       );
-    
+
     // Check if there is data coming from the form.
     if (this.starting_location_coordinates === undefined || this.destination_coordinates === undefined || this.date === undefined) {
       this.has_data = false;
@@ -104,11 +106,8 @@ export class ViewRouteComponent {
     // Get weather from route locations
     if (this.has_data) await this.getTravelInformations();
 
-    // Add weather informations to HTML
-    if (this.has_data && !this.api_error_occurence) await this.addWeatherToInterface();
-
     // Communicate if there is any API error ocurrence
-    if(this.api_error_occurence) {
+    if (this.api_error_occurence) {
       alert("An error has occurred in the API, please try again later.");
     }
 
@@ -163,8 +162,18 @@ export class ViewRouteComponent {
       routeWhileDragging: false
     }).addTo(this.map);
 
-    // Wait 2 seconds to build route and retrieve information -> Yes, it needs to be optimized (but by LRM owner)
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Wait for route to be found
+    return new Promise<void>((resolve) => {
+      this.itenerary.on('routesfound', (e: any) => {
+        const routes = e.routes;
+        if (routes && routes.length > 0) {
+          const firstCoord = routes[0].coordinates[0];
+          console.log('Route found. Start coord:', firstCoord);
+          console.log('Requested start:', this.starting_location_coordinates);
+        }
+        resolve();
+      });
+    });
 
   }
 
@@ -187,44 +196,31 @@ export class ViewRouteComponent {
       let response = await this.weatherService.getCitiesWeatherAndTimeInformations(this.locations_coordinates[i], last_coordinates, last_date);
       // Check if there is any API error
       if (response[0] == "api_error") {
-        this.api_error_occurence = true;
-        return;
+        console.warn(`Skipping point ${i} due to API error.`);
+        // Continue to next point instead of stopping
+        continue;
       }
       else {
-        this.locations_weather_map.set(response[1]!, [Number(response[0]!), response[2]!, response[3]!, response[4]!, response[5]!]);
+        const weatherInfo: WeatherInfo = {
+          temperature: Number(response[0]),
+          weatherCode: response[2]!,
+          weatherDescription: response[3]!,
+          estimatedArrival: response[4]!,
+          forecastDate: response[5]!
+        };
+        const locationName = response[1]!;
+
+        // Check if the location is the same as the previous one to avoid duplicates
+        if (this.weatherList.length === 0 || this.weatherList[this.weatherList.length - 1].location !== locationName) {
+          const icon = this.utilsService.getWeatherIconFromWeatherID(Number(weatherInfo.weatherCode));
+          this.weatherList.push({ location: locationName, weather: weatherInfo, icon: icon });
+        }
+
         // Update last location values to calculate new driving times
         last_coordinates = this.locations_coordinates[i];
-        last_date = response[4]!;
+        // Use estimatedArrival for the next segment's calculation to ensure time accumulates correctly
+        last_date = weatherInfo.estimatedArrival;
       }
-    }
-
-  }
-
-  // Add dynamic divs with weather information
-  addWeatherToInterface() {
-
-    for (let [key, value] of this.locations_weather_map) {
-      let weather_icon = this.utilsService.getWeatherIconFromWeatherID(Number(value[1]));
-
-      let div_parent_container = document.createElement('div');
-      div_parent_container.className = 'weather-info';
-
-      let div_son_icon_container = document.createElement('div');
-      div_son_icon_container.className = 'weather-icon-container';
-      div_son_icon_container.innerHTML = `<img src="` + weather_icon + `" alt="Cloud Weather" class="weather-icon">`;
-      div_parent_container.appendChild(div_son_icon_container);
-
-      let div_son_location = document.createElement('div');
-      div_son_location.className = 'weather-location';
-      div_son_location.innerHTML = key;
-      div_parent_container.appendChild(div_son_location);
-
-      let div_son_weather_value = document.createElement('div');
-      div_son_weather_value.className = 'weather-value';
-      div_son_weather_value.innerHTML = Math.round(value[0]).toString() + "º";
-      div_parent_container.appendChild(div_son_weather_value);
-
-      (<HTMLInputElement>document.getElementById("dinamic-weather-elements")).appendChild(div_parent_container);
     }
 
   }
@@ -237,69 +233,12 @@ export class ViewRouteComponent {
       return;
     }
 
-    // Create body with weather info
-    let doc_definition_body = [];
-    doc_definition_body.push(['Location', 'Degree Celsius', 'Weather', 'Estimated date of arrival', 'Forecast date']);
-    for (let [key, value] of this.locations_weather_map) {
-      doc_definition_body.push([key, value[0], value[2], value[3], value[4]]);
-    }
-
-    // Create pdfmake dd variable
-    let doc_definition = {
-      content: [
-        {
-          table: {
-            widths: ['*'],
-            body: [[{ text: "Sunny Route Report", style: 'filledHeader' }]]
-          }
-        },
-        { text: 'From: ' + this.starting_location + '.', style: 'subheader' },
-        { text: 'To: ' + this.destination + '.', style: 'subheader' },
-        'Date: ' + this.date_formated + '.',
-        {
-          style: 'table',
-          table: {
-            body: doc_definition_body
-          }
-        },
-        { text: 'Sunny Route is a GPS that allows you to view the weather information expected at different points along your route. You cand find more information in: https://github.com/ruijramos/Sunny-Route.', style: 'littletext' }
-      ],
-      styles: {
-        filledHeader: {
-          bold: true,
-          fontSize: 14,
-          color: 'white',
-          fillColor: '#37ACE3',
-          alignment: 'center'
-        },
-        header: {
-          fontSize: 30,
-          bold: true,
-          margin: [0, 0, 0, 10] as Margins
-        },
-        subheader: {
-          fontSize: 16,
-          bold: true,
-          margin: [0, 10, 0, 5] as Margins
-        },
-        littletext: {
-          fontSize: 10,
-          bold: true,
-          margin: [0, 10, 0, 5] as Margins
-        },
-        table: {
-          margin: [0, 5, 0, 15] as Margins
-        },
-        tableHeader: {
-          bold: true,
-          fontSize: 13,
-          color: 'black'
-        }
-      }
-    }
-
-    const pdf = pdfMake.createPdf(doc_definition);
-    pdf.download('route_weather_information.pdf');
+    this.pdfService.downloadRouteReport(
+      this.starting_location,
+      this.destination,
+      this.date_formated,
+      this.weatherList
+    );
 
   }
 
