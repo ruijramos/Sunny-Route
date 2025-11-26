@@ -23,7 +23,7 @@
     "@geoapify/angular-geocoder-autocomplete": "^3.0.0",
     "@geoapify/geocoder-autocomplete": "^3.0.1",
     "html2canvas": "^1.4.1",
-    "jspdf": "^2.5.1",
+    "jspdf": "^3.0.4",
     "leaflet": "^1.9.4",
     "leaflet-ant-path": "^1.3.0",
     "leaflet-routing-machine": "^3.2.12",
