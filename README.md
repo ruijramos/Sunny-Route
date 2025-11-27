@@ -8,7 +8,6 @@
 -   **Weather Along the Way**: View weather forecasts for key points on your journey, calculated based on your estimated arrival time.
 -   **Journey Visualization**: A beautiful, glassmorphism-inspired UI that visualizes your trip.
 -   **PDF Reports**: Download a detailed PDF report of your route and weather conditions.
--   **Responsive Design**: Works perfectly on desktop and mobile devices.
 
 ## How it works 🛠️
 
