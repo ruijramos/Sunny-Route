@@ -9,15 +9,21 @@ if (!fs.existsSync(envDirectory)) {
     fs.mkdirSync(envDirectory, { recursive: true });
 }
 
+// Helper to strip quotes
+const stripQuotes = (value) => {
+    if (!value) return '';
+    return value.replace(/^['"]|['"]$/g, '');
+};
+
 // Define the content for the environment files
 // We use process.env to access environment variables injected by Netlify
 const envConfigFile = `export const environment = {
   production: ${process.env.production === 'true'},
-  geoapify_geocoder_autocomplete_key: '${process.env.geoapify_geocoder_autocomplete_key || ''}',
-  nominatim_api_autocomplete_url: '${process.env.nominatim_api_autocomplete_url || ''}',
-  openweathermap_api_key: '${process.env.openweathermap_api_key || ''}',
-  openweathermap_api_url: '${process.env.openweathermap_api_url || ''}',
-  osrm_api_url: '${process.env.osrm_api_url || ''}'
+  geoapify_geocoder_autocomplete_key: '${stripQuotes(process.env.geoapify_geocoder_autocomplete_key)}',
+  nominatim_api_autocomplete_url: '${stripQuotes(process.env.nominatim_api_autocomplete_url)}',
+  openweathermap_api_key: '${stripQuotes(process.env.openweathermap_api_key)}',
+  openweathermap_api_url: '${stripQuotes(process.env.openweathermap_api_url)}',
+  osrm_api_url: '${stripQuotes(process.env.osrm_api_url)}'
 };
 `;
 
