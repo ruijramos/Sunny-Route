@@ -9,6 +9,10 @@
     --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
 }
 
+html {
+    font-size: 16px;
+}
+
 * {
     font-family: 'Inter', sans-serif;
     box-sizing: border-box;
