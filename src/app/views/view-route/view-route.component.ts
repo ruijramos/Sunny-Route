@@ -250,7 +250,12 @@ export class ViewRouteComponent {
   // Convert HTML div to PDF and download it
   downloadPDF() {
 
-    if (!this.has_data || this.is_loading || this.api_error_occurence) {
+    if (this.is_loading) {
+      this.snackBar.open("Please wait, the route is being calculated.", "Close", { duration: 3000 });
+      return;
+    }
+
+    if (!this.has_data || this.api_error_occurence) {
       this.snackBar.open("No data available.", "Close", { duration: 3000 });
       return;
     }
