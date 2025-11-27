@@ -11,11 +11,12 @@ import { last } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { WeatherInfo } from '../../models/weather.interface';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-view-route',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, MatSnackBarModule],
   templateUrl: './view-route.component.html',
   styleUrls: ['./view-route.component.css']
 })
@@ -47,10 +48,12 @@ export class ViewRouteComponent {
   public weather_info_is_open: boolean = false; // Variable that defines the weather information sidebar display 
 
   constructor(private route: ActivatedRoute,
+    private router: Router,
     private locationsService: locationsService,
     private weatherService: weatherService,
     private utilsService: utilsService,
-    private pdfService: PdfService) { }
+    private pdfService: PdfService,
+    private snackBar: MatSnackBar) { }
 
   async ngOnInit() {
 
@@ -79,7 +82,10 @@ export class ViewRouteComponent {
     }
 
     // Alert user that there is no data or date inserted is invalid
-    if (!this.has_data) alert("There is no data to build the route or data passed on is invalid. Please create a new route.");
+    if (!this.has_data) {
+      this.router.navigate(['/'], { queryParams: { error: 'invalid_data' } });
+      return;
+    }
 
     var map_center;
     // If there is no data (the page has not been invoked through the previous page), the center is set in the city of Porto, Portugal
@@ -97,7 +103,7 @@ export class ViewRouteComponent {
     // Check if route distance is not to much - avoid performance issues
     if (this.itenerary._selectedRoute.summary.totalDistance > this.route_max_distance) {
       this.has_data = false;
-      alert("It will not be possible to show weather information for this route: route too long.");
+      this.router.navigate(['/'], { queryParams: { error: 'route_too_long' } });
     }
 
     // Extract coordinates from route
@@ -108,7 +114,7 @@ export class ViewRouteComponent {
 
     // Communicate if there is any API error ocurrence
     if (this.api_error_occurence) {
-      alert("An error has occurred in the API, please try again later.");
+      this.router.navigate(['/'], { queryParams: { error: 'api_error' } });
     }
 
     this.is_loading = false;
@@ -137,6 +143,22 @@ export class ViewRouteComponent {
   initMap(center: number[]) {
 
     this.map = L.map('map').setView([center[0], center[1]], 6);
+
+    const iconRetinaUrl = 'assets/marker-icon-2x.png';
+    const iconUrl = 'assets/marker-icon.png';
+    const shadowUrl = 'assets/marker-shadow.png';
+    const iconDefault = L.icon({
+      iconRetinaUrl,
+      iconUrl,
+      shadowUrl,
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      tooltipAnchor: [16, -28],
+      shadowSize: [41, 41]
+    });
+    L.Marker.prototype.options.icon = iconDefault;
+
     this.map.zoomControl.remove();
     L.control.zoom({
       position: 'bottomleft'
@@ -229,7 +251,7 @@ export class ViewRouteComponent {
   downloadPDF() {
 
     if (!this.has_data || this.is_loading || this.api_error_occurence) {
-      alert("No data available.");
+      this.snackBar.open("No data available.", "Close", { duration: 3000 });
       return;
     }
 
