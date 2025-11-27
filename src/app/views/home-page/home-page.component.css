@@ -43,7 +43,7 @@ form:hover {
 
 .journey-container {
     position: relative;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     isolation: isolate;
     z-index: 10;
 }
@@ -54,6 +54,7 @@ form:hover {
 
 .journey-container .form-group:nth-child(3) {
     z-index: 10;
+    margin-bottom: 0;
 }
 
 .journey-line {
@@ -92,7 +93,7 @@ form:hover {
     justify-content: center;
     border: 1px solid #ecf0f1;
     flex-shrink: 0;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 
 .start-icon {
@@ -173,10 +174,10 @@ input[type="datetime-local"]:focus {
 button[type="submit"] {
     background: linear-gradient(135deg, #37ACE3 0%, #2188c9 100%);
     color: white;
-    padding: 1.2rem 3rem;
+    padding: 0.9rem 2rem;
     border: none;
     border-radius: 50px;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -244,6 +245,10 @@ button[type="submit"]:active {
         margin-bottom: 1rem;
     }
 
+    .journey-container {
+        margin-bottom: 1rem;
+    }
+
     .input-icon-wrapper {
         gap: 0.8rem;
     }
@@ -273,9 +278,10 @@ button[type="submit"]:active {
     }
 
     button[type="submit"] {
-        padding: 0.8rem 1.5rem;
-        font-size: 0.95rem;
-        width: 100%;
+        padding: 0.6rem 2rem;
+        font-size: 0.9rem;
+        width: auto;
+        min-width: 200px;
     }
 
     #app-logo {
@@ -304,6 +310,10 @@ button[type="submit"]:active {
     }
 
     .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .journey-container {
         margin-bottom: 1rem;
     }
 
