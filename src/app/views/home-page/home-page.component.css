@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    min-height: 100dvh;
     padding: 2rem;
 }
 
@@ -223,7 +223,7 @@ button[type="submit"]:active {
 /* Responsive Adjustments */
 @media (max-width: 600px) {
     #global-container {
-        padding: 0.5rem;
+        padding: 1.5rem;
     }
 
     .form-container {
@@ -236,8 +236,8 @@ button[type="submit"]:active {
     }
 
     .form-title {
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
+        font-size: 1.3rem;
+        margin-bottom: 1.2rem;
     }
 
     .form-group {
@@ -249,9 +249,9 @@ button[type="submit"]:active {
     }
 
     .input-icon {
-        width: 36px;
-        height: 36px;
-        padding: 6px;
+        width: 32px;
+        height: 32px;
+        padding: 5px;
         margin-top: 0;
     }
 
@@ -268,18 +268,51 @@ button[type="submit"]:active {
 
     input[type="datetime-local"],
     ::ng-deep .geoapify-autocomplete-input {
-        padding: 0.7rem 0.8rem !important;
-        font-size: 0.9rem !important;
+        padding: 0.6rem 0.8rem !important;
+        font-size: 0.85rem !important;
     }
 
     button[type="submit"] {
-        padding: 0.9rem 2rem;
-        font-size: 1rem;
+        padding: 0.8rem 1.5rem;
+        font-size: 0.95rem;
         width: 100%;
     }
 
     #app-logo {
         width: 100px;
         margin-top: 1rem;
+    }
+}
+
+/* Adjustments for smaller screens/laptops to prevent scrolling */
+@media (max-height: 800px) {
+    #global-container {
+        padding: 1rem;
+    }
+
+    .form-container {
+        margin-bottom: 1.5rem;
+    }
+
+    form {
+        padding: 1.5rem 2rem;
+    }
+
+    .form-title {
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .button-container {
+        margin-top: 1.5rem;
+    }
+
+    #app-logo {
+        margin-top: 1rem;
+        width: 100px;
     }
 }

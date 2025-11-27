@@ -1,7 +1,7 @@
 #global-container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
 }
 
@@ -46,7 +46,7 @@
 #map-and-sidebar-flex-box {
     display: flex;
     flex: 1;
-    height: calc(100vh - 4rem);
+    height: calc(100dvh - 4rem);
     position: relative;
 }
 
