@@ -9,7 +9,7 @@
 
 .form-container {
     width: 100%;
-    max-width: 480px;
+    max-width: 600px;
     margin-bottom: 3rem;
     animation: fadeInUp 0.8s ease-out;
     box-sizing: border-box;
@@ -133,6 +133,7 @@ input[type="datetime-local"] {
     color: #2c3e50;
     font-family: inherit;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
 }
 
 input[type="datetime-local"]:focus {
@@ -153,6 +154,7 @@ input[type="datetime-local"]:focus {
     color: #2c3e50;
     font-family: inherit;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    box-sizing: border-box;
 }
 
 ::ng-deep .geoapify-autocomplete-input:focus {
