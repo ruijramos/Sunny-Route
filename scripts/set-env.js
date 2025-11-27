@@ -9,10 +9,13 @@ if (!fs.existsSync(envDirectory)) {
     fs.mkdirSync(envDirectory, { recursive: true });
 }
 
-// Helper to strip quotes
+// Helper to strip quotes and trailing punctuation
 const stripQuotes = (value) => {
     if (!value) return '';
-    return value.replace(/^['"]|['"]$/g, '');
+    // Remove trailing commas and semicolons, then trim whitespace
+    let cleanValue = value.trim().replace(/[,;]$/, '').trim();
+    // Remove leading/trailing quotes
+    return cleanValue.replace(/^['"]|['"]$/g, '');
 };
 
 // Define the content for the environment files
