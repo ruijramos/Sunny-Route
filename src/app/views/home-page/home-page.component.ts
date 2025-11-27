@@ -4,7 +4,7 @@ import { locationsService } from '../../services/locations.services';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GeoapifyGeocoderAutocompleteModule } from '@geoapify/angular-geocoder-autocomplete';
-import { environment } from 'src/app/environments/environment';
+import { environment } from '../../environments/environment';
 
 import { MatIconModule } from '@angular/material/icon';
 
