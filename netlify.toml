@@ -2,6 +2,9 @@
   command = "npm run build"
   publish = "dist/sunny-route-app"
 
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "geoapify_geocoder_autocomplete_key,openweathermap_api_key,osrm_api_url,nominatim_api_autocomplete_url,openweathermap_api_url"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
