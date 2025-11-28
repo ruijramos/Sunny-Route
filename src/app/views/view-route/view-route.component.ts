@@ -188,7 +188,9 @@ export class ViewRouteComponent implements AfterViewInit {
   // Initialize and center map
   initMap(center: number[]) {
 
-    this.map = L.map('map').setView([center[0], center[1]], 6);
+    this.map = L.map('map', {
+      minZoom: 3 // Prevent zooming out too far
+    }).setView([center[0], center[1]], 6);
 
     const iconRetinaUrl = 'assets/marker-icon-2x.png';
     const iconUrl = 'assets/marker-icon.png';
@@ -227,7 +229,8 @@ export class ViewRouteComponent implements AfterViewInit {
         L.latLng(this.starting_location_coordinates[0], this.starting_location_coordinates[1]),
         L.latLng(this.destination_coordinates[0], this.destination_coordinates[1])
       ],
-      routeWhileDragging: false
+      routeWhileDragging: false,
+      fitSelectedRoutes: false // Disable auto-fit to handle it manually with padding
     }).addTo(this.map);
 
     // Wait for route to be found
@@ -238,6 +241,21 @@ export class ViewRouteComponent implements AfterViewInit {
           const firstCoord = routes[0].coordinates[0];
           console.log('Route found. Start coord:', firstCoord);
           console.log('Requested start:', this.starting_location_coordinates);
+
+          // Fit bounds with padding to account for sidebar
+          const route = routes[0];
+          const bounds = L.latLngBounds(route.coordinates);
+
+          let paddingRight = 0;
+          // If desktop and sidebar is open, add padding to the right
+          if (window.innerWidth > 600 && this.weather_info_is_open) {
+            paddingRight = 350; // Width of the sidebar
+          }
+
+          this.map.fitBounds(bounds, {
+            paddingTopLeft: [50, 50], // General padding
+            paddingBottomRight: [50 + paddingRight, 50] // Add sidebar width to right padding
+          });
         }
         resolve();
       });
