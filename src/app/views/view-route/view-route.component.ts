@@ -333,7 +333,8 @@ export class ViewRouteComponent implements AfterViewInit {
       this.starting_location,
       this.destination,
       this.date_formated,
-      this.weatherList
+      this.weatherList,
+      this.weatherSummary
     );
 
   }
