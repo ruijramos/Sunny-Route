@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { WeatherInfo } from '../../models/weather.interface';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { GroqService } from '../../services/groq.service';
 
 @Component({
   selector: 'app-view-route',
@@ -69,7 +70,8 @@ export class ViewRouteComponent implements AfterViewInit {
     private weatherService: weatherService,
     private utilsService: utilsService,
     private pdfService: PdfService,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private groqService: GroqService) { }
 
   async ngOnInit() {
 
@@ -309,6 +311,9 @@ export class ViewRouteComponent implements AfterViewInit {
       }
     }
 
+    // Generate weather summary after getting all weather info
+    this.generateSummary();
+
   }
 
   // Convert HTML div to PDF and download it
@@ -421,6 +426,23 @@ export class ViewRouteComponent implements AfterViewInit {
         this.weatherInfoSidebar.nativeElement.style.transform = `translateY(${peekTranslate}px)`;
       }
     }
+  }
+
+  // =================================================================================================================
+  // Weather Summary
+  // =================================================================================================================
+  public weatherSummary: string = '';
+  public isGeneratingSummary: boolean = false;
+
+  async generateSummary() {
+    this.isGeneratingSummary = true;
+    this.weatherSummary = await this.groqService.generateWeatherSummary(
+      this.starting_location,
+      this.destination,
+      this.date_formated,
+      this.weatherList
+    );
+    this.isGeneratingSummary = false;
   }
 
 }

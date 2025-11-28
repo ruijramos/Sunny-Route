@@ -34,6 +34,25 @@
           <span class="route-info">{{starting_location}} - {{destination}}</span>
           <span class="route-info">{{date_formated}}</span>
         </div>
+
+        <!-- Weather Summary Section -->
+        @if (has_data && !api_error_occurence) {
+        @if (weatherSummary) {
+        <div class="weather-summary-card">
+          <div class="summary-title">
+            <mat-icon>auto_awesome</mat-icon> Weather Summary
+          </div>
+          <div class="summary-content">
+            {{ weatherSummary }}
+          </div>
+        </div>
+        } @else {
+        <div class="weather-summary-card loading">
+          <mat-icon class="spin">sync</mat-icon> Generating Summary...
+        </div>
+        }
+        }
+
         <div id="dinamic-weather-elements">
           @if (is_loading && weatherList.length === 0) {
           <div class="loading-nodata-card">

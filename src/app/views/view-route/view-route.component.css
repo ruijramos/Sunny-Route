@@ -72,6 +72,60 @@
     }
 }
 
+.weather-summary-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+    margin: 1rem 1rem 0.5rem 1rem;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(55, 172, 227, 0.15);
+    border: 1px solid rgba(55, 172, 227, 0.2);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.weather-summary-card.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #666;
+    font-style: italic;
+    background: white;
+}
+
+.summary-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.summary-title mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.summary-content {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #444;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .weather-info-sidebar {
     width: 350px;
     background: var(--glass-bg);
