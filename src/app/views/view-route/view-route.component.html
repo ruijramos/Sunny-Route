@@ -13,7 +13,7 @@
       <a href=""> New Route </a>
       <a target="_blank" rel="noopener noreferrer" href="https://github.com/ruijramos/Sunny-Route"> About </a>
       <a id="weather-info-button" (click)="toggleWeatherInfoSidebar()">
-        <mat-icon> wb_sunny </mat-icon>
+        <mat-icon> menu </mat-icon>
       </a>
     </div>
 
@@ -21,8 +21,14 @@
 
       <div class="map-container" id="map" #map></div>
 
-      <div [ngClass]="{'open': weather_info_is_open}" class="weather-info-sidebar" id="weather-info-sidebar">
-        <div id="weather-info-container-title">
+      <div [ngClass]="{'open': weather_info_is_open}" class="weather-info-sidebar" id="weather-info-sidebar"
+        #weatherInfoSidebar (touchstart)="onTouchStart($event)" (touchmove)="onTouchMove($event)"
+        (touchend)="onTouchEnd($event)">
+
+        <div id="weather-info-container-title" #weatherInfoHeader>
+          <!-- Drag Handle for Mobile (inside header now) -->
+          <div class="drag-handle"></div>
+
           Weather Information
           <br>
           <span class="route-info">{{starting_location}} - {{destination}}</span>

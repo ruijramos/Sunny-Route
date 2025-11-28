@@ -190,30 +190,61 @@
     transform: scale(1.2);
 }
 
+/* Drag Handle Styles */
+.drag-handle {
+    width: 40px;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.4);
+    /* Lighter on blue bg */
+    border-radius: 2px;
+    margin: 0 auto 10px auto;
+    /* Center and add space below */
+    display: none;
+    /* Hidden on desktop */
+}
+
 /* Mobile Bottom Sheet Styles */
 @media (max-width: 600px) {
+    #weather-info-button {
+        display: none;
+    }
+
     .weather-info-sidebar {
         width: 100%;
-        height: 45dvh;
+        height: 80dvh;
         top: auto;
         bottom: 0;
         left: 0;
         right: 0;
         border-left: none;
-        border-top: var(--glass-border);
+        border-top: none;
+        /* Removed white border */
         border-radius: 24px 24px 0 0;
         transform: translateY(100%);
+        /* Initial state hidden, TS will set peek */
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        /* touch-action: none;  <-- Removed to allow content scrolling */
+        z-index: 2000;
+        /* Ensure it's above everything on mobile */
     }
 
     .weather-info-sidebar.open {
         transform: translateY(0);
     }
 
+    .drag-handle {
+        display: block;
+        /* Show on mobile */
+    }
+
     #weather-info-container-title {
         border-radius: 24px 24px 0 0;
-        padding: 1rem;
+        /* Restore radius */
+        padding: 1rem 1rem 1rem 1rem;
         font-size: 1rem;
+        touch-action: none;
+        /* Prevent browser scroll on header */
     }
 
     #dinamic-weather-elements {

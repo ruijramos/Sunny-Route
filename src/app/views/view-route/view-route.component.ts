@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as L from 'leaflet';
 import 'leaflet-routing-machine';
@@ -21,7 +21,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
   styleUrls: ['./view-route.component.css']
 })
 
-export class ViewRouteComponent {
+export class ViewRouteComponent implements AfterViewInit {
 
   public starting_location: string = '';
   public starting_location_coordinates: number[] = [];
@@ -46,6 +46,22 @@ export class ViewRouteComponent {
 
   public weatherList: { location: string, weather: WeatherInfo, icon: string }[] = [];
   public weather_info_is_open: boolean = false; // Variable that defines the weather information sidebar display 
+
+  // =================================================================================================================
+  // Mobile Bottom Sheet Properties
+  // =================================================================================================================
+  @ViewChild('weatherInfoSidebar') weatherInfoSidebar!: ElementRef;
+  @ViewChild('weatherInfoHeader') weatherInfoHeader!: ElementRef;
+
+  private touchStartY: number = 0;
+  private currentTouchY: number = 0;
+  private isDragging: boolean = false;
+
+  // Constants for drag behavior
+  private readonly DRAG_THRESHOLD = 50; // Minimum distance to trigger state change
+  private PEEK_HEIGHT = 150; // Initial value, updated dynamically based on header height
+  private sheetHeight: number = 0;
+
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -118,7 +134,32 @@ export class ViewRouteComponent {
     }
 
     this.is_loading = false;
+  }
 
+  ngAfterViewInit() {
+    // Calculate initial peek height and position after view initialization
+    // A small delay ensures that the DOM is fully rendered and dimensions are accurate
+    setTimeout(() => {
+      this.updatePeekHeight();
+    }, 500);
+  }
+
+  /**
+   * Updates the peek height based on the actual height of the header element.
+   * This ensures the bottom sheet peeks exactly enough to show the header.
+   */
+  private updatePeekHeight() {
+    if (this.weatherInfoHeader && this.weatherInfoSidebar) {
+      const headerHeight = this.weatherInfoHeader.nativeElement.offsetHeight;
+      this.PEEK_HEIGHT = headerHeight;
+      this.sheetHeight = this.weatherInfoSidebar.nativeElement.offsetHeight;
+
+      // If closed, set the initial transform to show only the peek area
+      if (!this.weather_info_is_open && window.innerWidth <= 600) {
+        const peekTranslate = this.sheetHeight - this.PEEK_HEIGHT;
+        this.weatherInfoSidebar.nativeElement.style.transform = `translateY(${peekTranslate}px)`;
+      }
+    }
   }
 
   // Check if the date entered is between the current date and the following 5 days
@@ -271,9 +312,92 @@ export class ViewRouteComponent {
 
   // Hamburguer menu to switch display of sidebar
   toggleWeatherInfoSidebar() {
-
     this.weather_info_is_open = !this.weather_info_is_open;
 
+    // Reset transform when toggling via button (desktop mainly, but good for safety)
+    if (this.weatherInfoSidebar) {
+      this.weatherInfoSidebar.nativeElement.style.transform = '';
+    }
+  }
+
+  // =================================================================================================================
+  // Touch Event Handlers for Mobile Bottom Sheet
+  // =================================================================================================================
+
+  onTouchStart(event: TouchEvent) {
+    // Only allow dragging if the user touches the header (which includes the drag handle)
+    const target = event.target as HTMLElement;
+    const isHeader = target.closest('#weather-info-container-title');
+
+    if (!isHeader) {
+      return;
+    }
+
+    this.touchStartY = event.touches[0].clientY;
+    this.currentTouchY = this.touchStartY;
+    this.isDragging = true;
+
+    // Disable CSS transition during drag for immediate responsiveness
+    this.weatherInfoSidebar.nativeElement.style.transition = 'none';
+
+    // Refresh sheet height in case of resizing
+    this.sheetHeight = this.weatherInfoSidebar.nativeElement.offsetHeight;
+  }
+
+  onTouchMove(event: TouchEvent) {
+    if (!this.isDragging) return;
+
+    this.currentTouchY = event.touches[0].clientY;
+    const deltaY = this.currentTouchY - this.touchStartY;
+
+    // Calculate new transform position
+    // If open (translateY=0), deltaY > 0 means dragging down (closing)
+    // If closed (translateY=max), deltaY < 0 means dragging up (opening)
+
+    let currentTranslateY = this.weather_info_is_open ? 0 : (this.sheetHeight - this.PEEK_HEIGHT);
+    let newTranslateY = currentTranslateY + deltaY;
+
+    // Clamp values to prevent detaching from bottom or going too high
+    const maxTranslateY = this.sheetHeight - this.PEEK_HEIGHT;
+    const minTranslateY = 0;
+
+    if (newTranslateY < minTranslateY) newTranslateY = minTranslateY;
+    if (newTranslateY > maxTranslateY) newTranslateY = maxTranslateY;
+
+    this.weatherInfoSidebar.nativeElement.style.transform = `translateY(${newTranslateY}px)`;
+  }
+
+  onTouchEnd(event: TouchEvent) {
+    if (!this.isDragging) return;
+    this.isDragging = false;
+
+    // Restore CSS transition for smooth snap animation
+    this.weatherInfoSidebar.nativeElement.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+
+    const deltaY = this.currentTouchY - this.touchStartY;
+    const peekTranslate = this.sheetHeight - this.PEEK_HEIGHT;
+
+    if (this.weather_info_is_open) {
+      // If currently open...
+      if (deltaY > this.DRAG_THRESHOLD) {
+        // ...and dragged down significantly: Close it
+        this.weather_info_is_open = false;
+        this.weatherInfoSidebar.nativeElement.style.transform = `translateY(${peekTranslate}px)`;
+      } else {
+        // ...otherwise: Snap back to open
+        this.weatherInfoSidebar.nativeElement.style.transform = ''; // Clears inline style, reverting to CSS class 'open' (translateY(0))
+      }
+    } else {
+      // If currently closed (peeking)...
+      if (deltaY < -this.DRAG_THRESHOLD) {
+        // ...and dragged up significantly: Open it
+        this.weather_info_is_open = true;
+        this.weatherInfoSidebar.nativeElement.style.transform = ''; // Clears inline style, reverting to CSS class 'open'
+      } else {
+        // ...otherwise: Snap back to peek
+        this.weatherInfoSidebar.nativeElement.style.transform = `translateY(${peekTranslate}px)`;
+      }
+    }
   }
 
 }
