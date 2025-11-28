@@ -73,6 +73,11 @@ export class ViewRouteComponent implements AfterViewInit {
 
   async ngOnInit() {
 
+    // Open sidebar by default on desktop (width > 600px)
+    if (window.innerWidth > 600) {
+      this.weather_info_is_open = true;
+    }
+
     this.is_loading = true;
 
     // Get form data from home page
