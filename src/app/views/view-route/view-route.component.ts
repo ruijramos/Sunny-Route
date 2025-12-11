@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { WeatherInfo } from '../../models/weather.interface';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { GroqService } from '../../services/groq.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-view-route',
@@ -232,7 +233,10 @@ export class ViewRouteComponent implements AfterViewInit {
         L.latLng(this.destination_coordinates[0], this.destination_coordinates[1])
       ],
       routeWhileDragging: false,
-      fitSelectedRoutes: false // Disable auto-fit to handle it manually with padding
+      fitSelectedRoutes: false, // Disable auto-fit to handle it manually with padding
+      router: L.Routing.osrmv1({
+        serviceUrl: environment.osrm_api_url.replace('/driving/', '')
+      })
     }).addTo(this.map);
 
     // Wait for route to be found
@@ -241,8 +245,6 @@ export class ViewRouteComponent implements AfterViewInit {
         const routes = e.routes;
         if (routes && routes.length > 0) {
           const firstCoord = routes[0].coordinates[0];
-          console.log('Route found. Start coord:', firstCoord);
-          console.log('Requested start:', this.starting_location_coordinates);
 
           // Fit bounds with padding to account for sidebar
           const route = routes[0];

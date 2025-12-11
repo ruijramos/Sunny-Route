@@ -23,6 +23,9 @@ export class utilsService {
     async getDrivingTime(start: [number, number],
         end: [number, number]) {
 
+        // If distance is less than 100 meters, return 0 (avoid API error)
+        if (this.getDistanceFromLatLonInM(start[0], start[1], end[0], end[1]) < 100) return 0;
+
         let driving_time = -1;
 
         // OSRM API (Free)
@@ -66,7 +69,7 @@ export class utilsService {
             }
         }
 
-        if (Math.abs(arr[left].dt - target_timestamp) >= Math.abs(arr[left - 1].dt - target_timestamp)) {
+        if (left > 0 && Math.abs(arr[left].dt - target_timestamp) >= Math.abs(arr[left - 1].dt - target_timestamp)) {
             return left - 1;
         }
 
@@ -104,6 +107,26 @@ export class utilsService {
                 return "";
         }
 
+    }
+
+
+
+    // Haversine formula to calculate distance in meters
+    getDistanceFromLatLonInM(lat1: number, lon1: number, lat2: number, lon2: number) {
+        var R = 6371; // Radius of the earth in km
+        var dLat = this.deg2rad(lat2 - lat1);
+        var dLon = this.deg2rad(lon2 - lon1);
+        var a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var d = R * c; // Distance in km
+        return d * 1000; // Distance in meters
+    }
+
+    deg2rad(deg: number) {
+        return deg * (Math.PI / 180)
     }
 
 }
