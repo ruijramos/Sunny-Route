@@ -29,7 +29,8 @@ export class PdfService {
             { text: 'Location', style: 'tableHeader' },
             { text: 'Temp (°C)', style: 'tableHeader' },
             { text: 'Condition', style: 'tableHeader' },
-            { text: 'Est. Arrival', style: 'tableHeader' }
+            { text: 'Est. Arrival', style: 'tableHeader' },
+            { text: 'Forecast Date', style: 'tableHeader' }
         ]);
 
         for (const item of weatherList) {
@@ -37,7 +38,8 @@ export class PdfService {
                 { text: item.location, style: 'tableCell' },
                 { text: item.weather.temperature + '°', style: 'tableCell' },
                 { text: item.weather.weatherDescription, style: 'tableCell' },
-                { text: item.weather.estimatedArrival.split(' ')[1].substring(0, 5), style: 'tableCell' }
+                { text: item.weather.estimatedArrival, style: 'tableCell' },
+                { text: item.weather.forecastDate, style: 'tableCell' }
             ]);
         }
 
@@ -113,7 +115,7 @@ export class PdfService {
                 style: 'table',
                 table: {
                     headerRows: 1,
-                    widths: ['*', 'auto', '*', 'auto'],
+                    widths: ['*', 'auto', '*', 'auto', 'auto'],
                     body: docDefinitionBody
                 },
                 layout: {
