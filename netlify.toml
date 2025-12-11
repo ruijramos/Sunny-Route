@@ -3,7 +3,7 @@
   publish = "dist/sunny-route-app"
 
 [build.environment]
-  SECRETS_SCAN_OMIT_KEYS = "geoapify_geocoder_autocomplete_key,openweathermap_api_key,mapbox_api_url,nominatim_api_autocomplete_url,openweathermap_api_url,production,groq_api_key,groq_api_url"
+  SECRETS_SCAN_OMIT_KEYS = "geoapify_geocoder_autocomplete_key,openweathermap_api_key,mapbox_api_url,nominatim_api_autocomplete_url,openweathermap_api_url,production,groq_api_key,groq_api_url,mapbox_api_key"
 
 [[redirects]]
   from = "/*"
