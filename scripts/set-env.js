@@ -26,9 +26,10 @@ const envConfigFile = `export const environment = {
   nominatim_api_autocomplete_url: '${stripQuotes(process.env.nominatim_api_autocomplete_url)}',
   openweathermap_api_key: '${stripQuotes(process.env.openweathermap_api_key)}',
   openweathermap_api_url: '${stripQuotes(process.env.openweathermap_api_url)}',
-  osrm_api_url: '${stripQuotes(process.env.osrm_api_url)}',
+  mapbox_api_url: '${stripQuotes(process.env.mapbox_api_url)}',
   groq_api_key: '${stripQuotes(process.env.groq_api_key)}',
-  groq_api_url: '${stripQuotes(process.env.groq_api_url)}'
+  groq_api_url: '${stripQuotes(process.env.groq_api_url)}',
+  mapbox_api_key: '${stripQuotes(process.env.mapbox_api_key)}'
 };
 `;
 

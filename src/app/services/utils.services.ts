@@ -32,7 +32,7 @@ export class utilsService {
         // Note: OSRM takes coordinates in "lon,lat" format
         // OSRM API (Free)
         // Note: OSRM takes coordinates in "lon,lat" format
-        const route_url = `${environment.osrm_api_url}${start[1]},${start[0]};${end[1]},${end[0]}?overview=false`;
+        const route_url = `${environment.mapbox_api_url}/driving/${start[1]},${start[0]};${end[1]},${end[0]}?overview=false&access_token=${(environment as any).mapbox_api_key}`;
 
         await fetch(route_url)
             .then((response) => response.json())

@@ -234,8 +234,8 @@ export class ViewRouteComponent implements AfterViewInit {
       ],
       routeWhileDragging: false,
       fitSelectedRoutes: false, // Disable auto-fit to handle it manually with padding
-      router: L.Routing.osrmv1({
-        serviceUrl: environment.osrm_api_url.replace('/driving/', '')
+      router: (L.Routing as any).mapbox((environment as any).mapbox_api_key, {
+        profile: 'mapbox/driving'
       })
     }).addTo(this.map);
 
