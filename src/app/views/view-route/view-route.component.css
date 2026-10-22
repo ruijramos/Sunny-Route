@@ -74,12 +74,24 @@
 
 .weather-summary-card {
     background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
-    margin: 1rem 1rem 0.8rem 1rem;
+    margin: 0 0 1rem 0;
     padding: 1rem;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(55, 172, 227, 0.15);
     border: 1px solid rgba(55, 172, 227, 0.2);
-    animation: fadeIn 0.5s ease-out;
+    animation: fadeIn 0.4s ease-out;
+    max-height: 200px;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.weather-summary-card::-webkit-scrollbar {
+    width: 4px;
+}
+
+.weather-summary-card::-webkit-scrollbar-thumb {
+    background: rgba(55, 172, 227, 0.3);
+    border-radius: 4px;
 }
 
 .weather-summary-card.loading {
@@ -182,6 +194,16 @@
     flex: 1;
     overflow-y: auto;
     padding: 1rem;
+    min-height: 0;
+}
+
+#dinamic-weather-elements::-webkit-scrollbar {
+    width: 6px;
+}
+
+#dinamic-weather-elements::-webkit-scrollbar-thumb {
+    background: rgba(55, 172, 227, 0.25);
+    border-radius: 4px;
 }
 
 .weather-info {
@@ -316,6 +338,12 @@
 
     #dinamic-weather-elements {
         padding: 0.8rem;
+    }
+
+    .weather-summary-card {
+        margin-bottom: 0.8rem;
+        padding: 0.8rem;
+        max-height: 150px;
     }
 
     .weather-info {

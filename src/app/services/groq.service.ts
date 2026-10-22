@@ -59,13 +59,13 @@ export class GroqService {
 
     const prompt = `
 I am planning a road trip from ${cleanStart} to ${cleanDest} starting on ${date}.
-Here is the weather forecast along the route:
+Weather forecast along the route:
 ${weatherDetails}
 
-Please provide a brief, friendly, and helpful summary of the weather conditions for this trip.
-Highlight any potential issues like rain, extreme temperatures, or fog.
-Do not use greetings like "Hi" or "Hello". Start directly with the information.
-Keep it under 100 words.
+Provide a concise, friendly summary of the driving weather conditions.
+Highlight any driving cautions (rain, extreme temperatures, fog).
+Do not use greetings or pleasantries. Start directly with the core information.
+Strictly keep it concise, under 45 words (maximum 2 to 3 sentences).
 `;
 
     // Try candidate models in order (handles tier differences or model deprecations)
@@ -81,7 +81,7 @@ Keep it under 100 words.
           ],
           model: model,
           temperature: 0.6,
-          max_tokens: 250
+          max_tokens: 120
         };
 
         const response: any = await firstValueFrom(
