@@ -144,26 +144,11 @@ input[type="datetime-local"]:focus {
     box-shadow: 0 4px 12px rgba(55, 172, 227, 0.15);
 }
 
-::ng-deep .geoapify-autocomplete-input {
+app-location-autocomplete {
+    display: block;
     width: 100%;
-    padding: 0.9rem 1rem !important;
-    border: 1px solid #dfe6e9 !important;
-    border-radius: 12px !important;
-    font-size: 1rem !important;
-    transition: all 0.3s ease;
-    background: #fff;
-    color: #2c3e50;
-    font-family: inherit;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-    box-sizing: border-box;
 }
 
-::ng-deep .geoapify-autocomplete-input:focus {
-    outline: none;
-    background: #fff;
-    border-color: var(--primary-color) !important;
-    box-shadow: 0 4px 12px rgba(55, 172, 227, 0.15);
-}
 
 .button-container {
     display: flex;
@@ -272,7 +257,7 @@ button[type="submit"]:active {
     }
 
     input[type="datetime-local"],
-    ::ng-deep .geoapify-autocomplete-input {
+    app-location-autocomplete input {
         padding: 0.6rem 0.8rem !important;
         font-size: 0.85rem !important;
     }

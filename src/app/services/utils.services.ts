@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -28,24 +27,20 @@ export class utilsService {
 
         let driving_time = -1;
 
-        // OSRM API (Free)
-        // Note: OSRM takes coordinates in "lon,lat" format
-        // OSRM API (Free)
-        // Note: OSRM takes coordinates in "lon,lat" format
-        const route_url = `${environment.mapbox_api_url}/driving/${start[1]},${start[0]};${end[1]},${end[0]}?overview=false&access_token=${(environment as any).mapbox_api_key}`;
+        // Free OSRM public router
+        const route_url = `https://router.project-osrm.org/route/v1/driving/${start[1]},${start[0]};${end[1]},${end[0]}?overview=false`;
 
-        await fetch(route_url)
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.code === 'Ok' && data.routes && data.routes.length > 0) {
-                    driving_time = data.routes[0].duration;
-                } else {
-                    console.error('OSRM Error:', data);
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+        try {
+            const response = await fetch(route_url);
+            const data = await response.json();
+            if (data.code === 'Ok' && data.routes && data.routes.length > 0) {
+                driving_time = data.routes[0].duration;
+            } else {
+                console.warn('Routing error response:', data);
+            }
+        } catch (error) {
+            console.error('Error fetching driving time:', error);
+        }
 
         return driving_time;
 
@@ -85,48 +80,42 @@ export class utilsService {
 
     }
 
-    // Returns the icon associated with each weather ID
-    getWeatherIconFromWeatherID(id: number) {
+    // Returns the icon associated with each weather ID (handles Open-Meteo WMO and legacy OWM)
+    getWeatherIconFromWeatherID(id: number): string {
+        // Open-Meteo WMO weather codes
+        if (id === 0) return "assets/images/weather_icons/sun.png";
+        if (id >= 1 && id <= 2) return "assets/images/weather_icons/cloud_sun.png";
+        if (id === 3 || id === 45 || id === 48) return "assets/images/weather_icons/cloud.png";
+        if ((id >= 51 && id <= 55) || (id >= 61 && id <= 65) || (id >= 80 && id <= 82)) return "assets/images/weather_icons/rain.png";
+        if ((id >= 56 && id <= 57) || (id >= 66 && id <= 67) || (id >= 71 && id <= 77) || (id >= 85 && id <= 86)) return "assets/images/weather_icons/snow.png";
+        if (id >= 95 && id <= 99) return "assets/images/weather_icons/storm.png";
 
-        switch (true) {
-            case (id >= 200 && id <= 232):
-                return "assets/images/weather_icons/storm.png";
-            case (id >= 300 && id <= 321):
-                return "assets/images/weather_icons/cloud_rain_sun.png";
-            case (id >= 500 && id <= 531):
-                return "assets/images/weather_icons/rain.png";
-            case (id >= 600 && id <= 622):
-                return "assets/images/weather_icons/snow.png";
-            case (id >= 701 && id <= 781):
-                return "assets/images/weather_icons/cloud_rain_sun.png";
-            case (id === 800):
-                return "assets/images/weather_icons/sun.png";
-            case (id >= 801 && id <= 804):
-                return "assets/images/weather_icons/cloud.png";
-            default:
-                return "";
-        }
+        // Legacy OpenWeatherMap IDs fallback
+        if (id >= 200 && id <= 232) return "assets/images/weather_icons/storm.png";
+        if (id >= 300 && id <= 321) return "assets/images/weather_icons/cloud_rain_sun.png";
+        if (id >= 500 && id <= 531) return "assets/images/weather_icons/rain.png";
+        if (id >= 600 && id <= 622) return "assets/images/weather_icons/snow.png";
+        if (id >= 701 && id <= 781) return "assets/images/weather_icons/cloud_rain_sun.png";
+        if (id === 800) return "assets/images/weather_icons/sun.png";
+        if (id >= 801 && id <= 804) return "assets/images/weather_icons/cloud.png";
 
+        return "assets/images/weather_icons/cloud.png";
     }
 
-
-
     // Haversine formula to calculate distance in meters
-    getDistanceFromLatLonInM(lat1: number, lon1: number, lat2: number, lon2: number) {
-        var R = 6371; // Radius of the earth in km
-        var dLat = this.deg2rad(lat2 - lat1);
-        var dLon = this.deg2rad(lon2 - lon1);
-        var a =
+    getDistanceFromLatLonInM(lat1: number, lon1: number, lat2: number, lon2: number): number {
+        const R = 6371; // Radius of the earth in km
+        const dLat = this.deg2rad(lat2 - lat1);
+        const dLon = this.deg2rad(lon2 - lon1);
+        const a =
             Math.sin(dLat / 2) * Math.sin(dLat / 2) +
             Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
             Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        var d = R * c; // Distance in km
-        return d * 1000; // Distance in meters
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c * 1000; // Distance in meters
     }
 
-    deg2rad(deg: number) {
-        return deg * (Math.PI / 180)
+    deg2rad(deg: number): number {
+        return deg * (Math.PI / 180);
     }
-
 }

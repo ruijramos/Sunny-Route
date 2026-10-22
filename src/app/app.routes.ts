@@ -1,14 +1,16 @@
 import { Routes } from '@angular/router';
-import { HomePageComponent } from './views/home-page/home-page.component';
-import { ViewRouteComponent } from './views/view-route/view-route.component';
 
 export const routes: Routes = [
-    {
-        path: '',
-        component: HomePageComponent
-    },
-    {
-        path: 'view-route',
-        component: ViewRouteComponent
-    }
+  {
+    path: '',
+    loadComponent: () => import('./views/home-page/home-page.component').then(m => m.HomePageComponent)
+  },
+  {
+    path: 'view-route',
+    loadComponent: () => import('./views/view-route/view-route.component').then(m => m.ViewRouteComponent)
+  },
+  {
+    path: '**',
+    redirectTo: ''
+  }
 ];

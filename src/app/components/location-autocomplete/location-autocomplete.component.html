@@ -1,0 +1,46 @@
+<div class="autocomplete-wrapper">
+  <div class="input-field-container">
+    <input
+      type="text"
+      [id]="id"
+      [name]="name"
+      [placeholder]="placeholder"
+      [required]="required"
+      [value]="searchQuery"
+      (input)="onInput($event)"
+      (focus)="onFocus()"
+      (keydown)="onKeyDown($event)"
+      autocomplete="off"
+      class="autocomplete-input"
+    />
+    @if (isLoading) {
+      <mat-icon class="status-icon spin">sync</mat-icon>
+    } @else if (searchQuery) {
+      <button type="button" class="clear-btn" (click)="clear()" aria-label="Clear location">
+        <mat-icon class="status-icon clear-icon">close</mat-icon>
+      </button>
+    }
+  </div>
+
+  @if (isOpen && suggestions.length > 0) {
+    <ul class="dropdown-list" role="listbox">
+      @for (feature of suggestions; track $index) {
+        <li
+          role="option"
+          [attr.aria-selected]="selectedIndex === $index"
+          [class.active]="selectedIndex === $index"
+          class="dropdown-item"
+          (click)="selectPlace(feature)"
+        >
+          <mat-icon class="item-icon">place</mat-icon>
+          <div class="item-text">
+            <span class="item-title">{{ feature.properties.name }}</span>
+            @if (formatDetails(feature)) {
+              <span class="item-subtitle">{{ formatDetails(feature) }}</span>
+            }
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</div>
