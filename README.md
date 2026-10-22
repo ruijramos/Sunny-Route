@@ -1,4 +1,4 @@
-# <img src="src/favicon.svg" width="30"> Sunny Route
+# Sunny Route
 
 **Sunny Route is a smart travel companion that helps you plan road trips by showing weather forecasts along your route in real time.**
 
